@@ -1,0 +1,4 @@
+## ¿Qué vas a construir?
+Una galería de tarjetas de servicios que se acomoda sola de 1 columna (celular) a 3 columnas (escritorio), usando Box Model, Flexbox dentro de cada tarjeta, CSS Grid para la rejilla, Media Queries mobile-first, tipografía fluida y modo oscuro automático.
+Encontrarás 10 preguntas de opción múltiple (5 puntos cada una, 50 en total) junto al código que las origina. Se califican todas juntas, una sola vez, con el botón "Finalizar práctica y calificar" al final. Después de calificar, tus respuestas quedan bloqueadas — solo tienes un intento.
+Esta guía cubre únicamente los temas de la Clase 3 (Box Model, Flexbox, Grid, Media Queries, tipografía fluida, frameworks CSS). Para la teoría completa abre clase3-diseno-adaptable-css3.html, y para la guía de instalación e investigación abierta abre clase3-guia-paso-a-paso.html, ambos en esta misma carpeta.
