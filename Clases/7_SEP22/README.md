@@ -140,3 +140,89 @@ ejecutar();
 - Envuelve todas las operaciones en try...catch.(Porque dependemos de API's de terceros, lo hacemos en caso de que la API falle)
 - No mezcles await con .then().
 - No olvides que await solo funciona dentro de una función async
+---
+## Tipos de errores en Javascript
+- Errores de sintaxis
+- Errores de referencia, cuando trato de acceder a variables o métodos que no han sido definidos
+- Errores de ejecución, ocurren durante el tiempo de ejecución aunque la sintáxis sea válida
+
+## Control de errores
+- Se utiliza try...catch, en donde catch solo se ejecuta en caso de que haya un error.
+```javascript
+try {
+ const json = '{ "nombre": "Ana", "edad": 25 }';
+ const usuario = JSON.parse(json);
+ console.log(usuario.nombre);
+} catch (error) {
+ console.error("Error al parsear JSON:", error.message);
+}
+```
+- Lanzar los errores manualmente con throw
+```javascript
+function dividir(a, b) {
+ if (b === 0) {
+ throw new Error("No se puede dividir por cero");
+ }
+ return a / b;
+}
+try {
+ console.log(dividir(10, 0));
+} catch (error) {
+ console.error("Error detectado:", error.message);
+}
+
+// Salida: Error detectado: No se puede dividir por cero
+```
+- Bloque finally, limpieza y cierre seguro
+    - El bloque finally se ejecuta siempre, ocurra o no un error. Es útil para liberar recursos, cerrar conexiones o limpiar variables
+```javascript
+try {
+ console.log("Abriendo conexión...");
+ throw new Error("Falla en la conexión");
+} catch (error) {
+ console.error("Error:", error.message);
+} finally {
+ console.log("Cerrando conexión...");
+}
+```
+---
+## Errores personalizados
+- Errores personalizados para manejar la semántica del programa
+```javascript
+class ErrorDeValidacion extends Error {
+ constructor(mensaje) {
+ super(mensaje);
+ this.name = "ErrorDeValidacion";
+ }
+}
+function validarEdad(edad) {
+ if (edad < 0 || edad > 120) {
+ throw new ErrorDeValidacion("Edad fuera de rango");
+ }
+ return "Edad válida";
+}
+try {
+ console.log(validarEdad(200));
+} catch (error) {
+ console.error(`${error.name}: ${error.message}`);
+}
+```
+---
+## Registro y trazabilidad de errores
+- En toda página web debemos registrar los errores, para análisis posterior en la consola o enviándolos a un servidor de monitoreo
+- Se hace con un archivo `.log`
+- Como se podría hacer:
+```typescript
+function registrarError(error) {
+ console.error(`[${new Date().toISOString()}] ${error.name}: ${error.message}`);
+}
+try {
+ throw new Error("Fallo inesperado");
+} catch (error) {
+ registrarError(error);
+}
+// Salida [2025-10-07T12:45:30.000Z] Error: Fallo inesperado
+```
+
+## Buenas prácticas generales
+![alt text](buenasPracticasGenerales.png)
