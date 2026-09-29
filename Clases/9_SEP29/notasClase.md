@@ -44,3 +44,57 @@
     });
     ```
 - Las funciones que no tienen nombre son funciones anónimas, son funciones que se disparan o se ejectuan en ese momento
+
+## Rol del DOM API en validación
+- Permite escuchar y reaccionar ante los cambios en los elementos de un formulario.
+- Cada campo(input, select, textarea) genera eventos (input, change, blur, focus)
+```html
+<form id="registro">
+    <input id="nombre" placeholder="Nombre completo" />
+    <small id="errNombre" class="error"></small>
+</form>
+<script>
+    const nombre = document.querySelector("#nombre");
+    const errNombre = document.querySelector("#errNombre");
+    nombre.addEventListener("input", () => {
+        if (nombre.value.trim().length < 3) {
+           errNombre.textContent = "El nombre debe tener al menos 3 caracteres.";
+           nombre.classList.add("invalido");
+        } else {
+           errNombre.textContent = "";
+           nombre.classList.remove("invalido");
+        }
+        }
+    );
+</script>
+```
+## API nativa HTML5
+- `input.validity`
+- `checkValidity()`
+- `setCustomValidity(msg)`
+- `reportValidity()`
+```javascript
+const email = document.querySelector("#email");
+email.addEventListener("input", () => {
+    if (!email.value.includes("@")) {
+       email.setCustomValidity("Debe incluir un símbolo @");
+    } else {
+       email.setCustomValidity("");
+    }
+});
+```
+
+## Validación con expresiones regulares
+- Se utilizan expresiones regulares que estan incluidas en el DOM
+```javascript
+const telefono = document.querySelector("#telefono");
+const msg = document.querySelector("#errorTelefono");
+const regex = /^\d{10}$/; // solo 10 dígitos -> EXPRESIONES REGULARES
+telefono.addEventListener("input", () => {
+    if (!regex.test(telefono.value)) {
+        msg.textContent = "El teléfono debe tener 10 dígitos.";
+    } else {
+        msg.textContent = "";
+    }
+});
+```
