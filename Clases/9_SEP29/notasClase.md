@@ -98,3 +98,49 @@ telefono.addEventListener("input", () => {
     }
 });
 ```
+
+## Fetch API y comsumo de datos
+- Construye métodos asincrónicos que me permite comunicarme con un servidor para un intercambio de datos.
+- *Fetch API*: Es una interfaz moderna basada en en promesas que permite realizar solicitudes HTTP para recuperar(GET) o enviar(POST, PUT, DELETE) información
+    - El tipo de solicitud que se haga depende del cliente
+
+- **FETCH API**: También nos permite trabajar con métodos asincrónicos, pero en vez de ocupar el retunr, ocupamos `await`
+```javascript
+fetch("https://api.example.com/login", {
+    method: "POST",
+    headers: {
+    "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ // -> Serializamos la información
+    usuario: "damian",
+    clave: "12345"
+    })
+})
+    .then(r => r.json())
+    .then(data => console.log("Respuesta:", data))
+    .catch(err => console.error(err));
+```
+
+- **Serialización:** Es el roceso que convierte un objeto o estructura de datos a un formato que pueda generar o enviar un JSON
+- Encabezados personalizados, {`Content-type`:`apllication/json`}
+
+## Almacenamiento de datos con IndexDB
+- Permite almacenar grande volumenes de datos estructurados
+- Es ideal para aplicaciones offline(Páginas web progresivas)
+- Permite índices, búsquedas y transacciones, lo que hace ideal para aplicaciones offline.
+- Utiliza `objectStore`, que son las tablas.
+    - Para crealo:
+        - db.createObjectStore("usuarios", {keyPath: "id"})
+- Sincronización entre FETCH e IndexDB
+    - Primero me conecto a internet, traigo la información
+    
+- Cuando hablamos de accesibilidad nunca nos debemos olvidar de los 4 principios del POUR
+    - Perceptible: La información debe ser visible o audible
+    - Operable: El contenido debe ser navegable por teclado
+    - Comprensible: Las instrucciones y mensajes deben ser claros
+    - Robusto: Compatible con diferentes tecnologías asistidas(tecnologías que utilizan las personas no videntes).
+
+
+
+- **DEBER**: Traer una página web offline(programarla). - [13/10/2026]
+    - Informe a mano en el cuaderno(Título, objetivo general, objetivos especificos, resumen, introducción, metodología, resultados, conclusiones y bibliografía)
