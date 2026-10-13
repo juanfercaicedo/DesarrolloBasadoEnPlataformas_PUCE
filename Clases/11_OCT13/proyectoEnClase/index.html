@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f3f5ef">
+    <meta name="description" content="Comparte una ubicación GPS con permiso y observa dispositivos conectados en tiempo real.">
+    <title>Enlace | Ubicación en tiempo real</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js" defer></script>
+    <script type="module" src="assets/js/app.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <header class="topbar">
+        <a class="brand" href="#inicio" aria-label="Enlace, inicio">
+            <span class="brand-icon" aria-hidden="true"><span></span></span>
+            <span>enlace<span class="brand-period">.</span></span>
+        </a>
+        <div class="topbar-right">
+            <span class="privacy-label"><span aria-hidden="true">◉</span> UBICACIÓN CON PERMISO</span>
+            <p class="connection-pill" id="connectionStatus" role="status" aria-live="polite">
+                <span class="connection-dot" aria-hidden="true"></span>
+                <span id="connectionText">Conectando</span>
+            </p>
+        </div>
+    </header>
+
+    <main id="contenido">
+        <section class="workspace" id="inicio" aria-labelledby="page-title">
+            <div class="workspace-heading">
+                <div>
+                    <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span> PANEL DE UBICACIÓN <span class="eyebrow-divider">/</span> <span id="localClock">--:--:--</span></p>
+                    <h1 id="page-title">Personas <span>en movimiento.</span></h1>
+                    <p class="page-description">Ubicación GPS compartida en tiempo real, solo con autorización del dispositivo.</p>
+                </div>
+                <div class="live-total" aria-live="polite" aria-atomic="true">
+                    <span class="live-total-number" id="peopleCount">0</span>
+                    <span class="live-total-label">DISPOSITIVOS<br>COMPARTIENDO</span>
+                </div>
+            </div>
+
+            <div class="dashboard">
+                <aside class="sidebar" aria-label="Controles de ubicación y dispositivos">
+                    <section class="panel share-panel" aria-labelledby="share-title">
+                        <div class="panel-heading">
+                            <div>
+                                <p class="section-kicker">ESTE DISPOSITIVO</p>
+                                <h2 id="share-title">Compartir ubicación</h2>
+                            </div>
+                            <span class="gps-glyph" aria-hidden="true">⌖</span>
+                        </div>
+                        <label class="field-label" for="deviceName">Nombre visible</label>
+                        <input id="deviceName" class="text-field" type="text" maxlength="32" autocomplete="nickname" placeholder="Ej.: Teléfono de Ana">
+                        <div class="share-actions">
+                            <button class="button button-share" id="startSharing" type="button" disabled>
+                                <span class="button-symbol" aria-hidden="true">⌖</span>
+                                <span>Empezar a compartir</span>
+                            </button>
+                            <button class="button button-stop" id="stopSharing" type="button" hidden>
+                                <span class="button-symbol" aria-hidden="true">■</span>
+                                <span>Dejar de compartir</span>
+                            </button>
+                        </div>
+                        <p class="share-status" id="shareStatus" role="status" aria-live="polite">La ubicación está detenida.</p>
+                        <div class="coordinate-grid" aria-label="Coordenadas actuales">
+                            <div class="coordinate-cell">
+                                <span class="coordinate-label">LATITUD</span>
+                                <output id="latitudeValue">--.------</output>
+                            </div>
+                            <div class="coordinate-cell">
+                                <span class="coordinate-label">LONGITUD</span>
+                                <output id="longitudeValue">--.------</output>
+                            </div>
+                        </div>
+                        <div class="gps-details">
+                            <span>Precisión <strong id="accuracyValue">--</strong></span>
+                            <span>Actualización <strong id="updatedValue">--:--:--</strong></span>
+                        </div>
+                    </section>
+
+                    <section class="panel people-panel" aria-labelledby="people-title">
+                        <div class="people-heading">
+                            <div>
+                                <p class="section-kicker">EN VIVO</p>
+                                <h2 id="people-title">Dispositivos</h2>
+                            </div>
+                            <span class="people-count" id="deviceCount">0</span>
+                        </div>
+                        <ul class="people-list" id="peopleList" aria-live="polite" aria-relevant="additions removals text">
+                            <li class="empty-state" id="emptyPeople">Esperando dispositivos que compartan ubicación.</li>
+                        </ul>
+                    </section>
+
+                    <p class="privacy-note"><span aria-hidden="true">i</span> Al detener el envío, se elimina de Firebase la ubicación de este dispositivo. La ubicación requiere HTTPS y permiso del navegador.</p>
+                </aside>
+
+                <section class="map-panel" aria-label="Mapa de ubicaciones en tiempo real">
+                    <div class="map-toolbar">
+                        <div class="map-title-group">
+                            <span class="map-pin" aria-hidden="true">⌖</span>
+                            <div>
+                                <h2>Mapa en vivo</h2>
+                                <p id="mapStatus">Esperando configuración del mapa</p>
+                            </div>
+                        </div>
+                        <div class="map-legend"><span class="legend-dot"></span> Compartiendo</div>
+                    </div>
+                    <div class="map-canvas" id="mapCanvas" role="region" aria-label="Mapa interactivo de Google Maps">
+                        <div class="map-placeholder" id="mapPlaceholder">
+                            <span class="placeholder-crosshair" aria-hidden="true">⌖</span>
+                            <p>El mapa aparecerá aquí</p>
+                            <span>Configura la clave de Google Maps en assets/js/config.js</span>
+                        </div>
+                    </div>
+                    <div class="map-footer">
+                        <span>GOOGLE MAPS <span class="footer-separator">·</span> GPS</span>
+                        <span id="mapUpdated">SIN UBICACIONES RECIBIDAS</span>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <span>ENLACE <span class="footer-separator">/</span> DESARROLLO BASADO EN PLATAFORMAS</span>
+        <span>La ubicación se comparte únicamente mientras el usuario la autoriza.</span>
+    </footer>
+</body>
+</html>
