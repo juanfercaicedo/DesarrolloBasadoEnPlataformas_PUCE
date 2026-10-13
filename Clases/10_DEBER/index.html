@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#102a2a">
+    <meta name="description" content="Guía interactiva sobre páginas web que funcionan sin conexión a Internet.">
+    <title>Aula sin señal | Web offline</title>
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <script src="assets/js/app.js" defer></script>
+</head>
+<body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <header class="site-header">
+        <a class="brand" href="#inicio" aria-label="Aula sin señal, inicio">
+            <span class="brand-mark" aria-hidden="true">◎</span>
+            <span>AULA <strong>SIN SEÑAL</strong></span>
+        </a>
+        <nav class="main-nav" aria-label="Secciones principales">
+            <a href="#guia">Guía</a>
+            <a href="#practica">Práctica</a>
+        </nav>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false" aria-label="Activar modo oscuro">
+            <span class="theme-icon" aria-hidden="true">◐</span>
+            <span id="themeToggleText">Modo oscuro</span>
+        </button>
+        <p class="connection" id="connectionStatus" role="status" aria-live="polite" aria-atomic="true">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span id="connectionText">Comprobando conexión</span>
+        </p>
+    </header>
+
+    <main id="contenido">
+        <section class="hero" id="inicio" aria-labelledby="hero-title">
+            <div class="hero-copy">
+                <p class="eyebrow"><span class="eyebrow-line"></span> DESARROLLO BASADO EN PLATAFORMAS</p>
+                <h1 id="hero-title">La web también<br>vive <em>sin señal.</em></h1>
+                <p class="hero-description">Una guía práctica para entender cómo una página puede seguir siendo útil cuando Internet no está disponible.</p>
+                <a class="button button-light" href="#guia">Explorar la guía <span aria-hidden="true">↓</span></a>
+            </div>
+            <div class="hero-art" aria-hidden="true">
+                <div class="orbit orbit-one"></div>
+                <div class="orbit orbit-two"></div>
+                <div class="signal-card">
+                    <span class="signal-icon">⌁</span>
+                    <span class="signal-label">MODO OFFLINE</span>
+                    <span class="signal-state"><span></span> Todo listo</span>
+                </div>
+                <span class="orbit-label label-top">01 / GUARDAR</span>
+                <span class="orbit-label label-bottom">02 / VOLVER A USAR</span>
+            </div>
+            <div class="hero-foot">
+                <span>UNA EXPERIENCIA QUE NO SE INTERRUMPE</span>
+                <span>HTML · CSS · JAVASCRIPT · INDEXEDDB</span>
+            </div>
+        </section>
+
+        <section class="content-section guide-section" id="guia" aria-labelledby="guide-title">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow eyebrow-dark">01 — ENTENDER</p>
+                    <h2 id="guide-title">¿Qué hace offline<br>una página web?</h2>
+                </div>
+                <p class="section-intro">Una aplicación offline guarda con anticipación lo necesario en el dispositivo. Así puede mostrar su contenido y responder a acciones sin pedir cada dato a un servidor.</p>
+            </div>
+
+            <div class="concept-grid">
+                <article class="concept-card concept-featured">
+                    <span class="card-number">01</span>
+                    <span class="concept-icon" aria-hidden="true">↯</span>
+                    <h3>Service worker</h3>
+                    <p>Es un script que el navegador ejecuta aparte de la página. Puede guardar archivos en caché y entregarlos cuando no hay conexión.</p>
+                    <span class="concept-tag">LA CAJA DE HERRAMIENTAS</span>
+                </article>
+                <article class="concept-card">
+                    <span class="card-number">02</span>
+                    <span class="concept-icon" aria-hidden="true">▤</span>
+                    <h3>Datos locales</h3>
+                    <p><code>localStorage</code> sirve para preferencias pequeñas; <code>IndexedDB</code> guarda datos estructurados, como estas notas.</p>
+                    <span class="concept-tag">EN EL DISPOSITIVO</span>
+                </article>
+                <article class="concept-card">
+                    <span class="card-number">03</span>
+                    <span class="concept-icon" aria-hidden="true">↔</span>
+                    <h3>Cliente y servidor</h3>
+                    <p>El navegador es el cliente. Un servidor puede actualizar los datos cuando vuelve la conexión, si la aplicación necesita sincronizarlos.</p>
+                    <span class="concept-tag">SINCRONIZAR DESPUÉS</span>
+                </article>
+            </div>
+            <aside class="callout" aria-label="Aviso de privacidad">
+                <span class="callout-mark" aria-hidden="true">!</span>
+                <p><strong>Privacidad primero.</strong> Guardar en el dispositivo es útil, pero no se deben almacenar contraseñas ni datos sensibles sin analizar los riesgos y controles necesarios.</p>
+            </aside>
+        </section>
+
+        <section class="practice-section" id="practica" aria-labelledby="practice-title">
+            <div class="content-section practice-inner">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow eyebrow-light">02 — PONER A PRUEBA</p>
+                        <h2 id="practice-title">Aprende haciendo.</h2>
+                    </div>
+                    <p class="section-intro">Responde el reto y escribe una nota. Tu avance y tus notas se guardan en este dispositivo.</p>
+                </div>
+
+                <div class="practice-grid">
+                    <section class="activity-card quiz-card" aria-labelledby="quiz-title">
+                        <div class="activity-heading">
+                            <span class="activity-icon" aria-hidden="true">?</span>
+                            <div>
+                                <p class="eyebrow eyebrow-dark">RETO RÁPIDO</p>
+                                <h3 id="quiz-title">Comprueba lo aprendido</h3>
+                            </div>
+                        </div>
+                        <form id="quizForm">
+                            <fieldset class="question">
+                                <legend>1. ¿Qué permite que una web abra archivos guardados sin Internet?</legend>
+                                <label><input type="radio" name="q1" value="a" required> Una hoja de estilos</label>
+                                <label><input type="radio" name="q1" value="b"> Un service worker y la caché</label>
+                                <label><input type="radio" name="q1" value="c"> Un formulario HTML</label>
+                            </fieldset>
+                            <fieldset class="question">
+                                <legend>2. ¿Cuál opción guarda datos estructurados en el navegador?</legend>
+                                <label><input type="radio" name="q2" value="a" required> IndexedDB</label>
+                                <label><input type="radio" name="q2" value="b"> Una media query</label>
+                                <label><input type="radio" name="q2" value="c"> El elemento title</label>
+                            </fieldset>
+                            <fieldset class="question">
+                                <legend>3. ¿Qué principio de POUR se relaciona con navegar usando teclado?</legend>
+                                <label><input type="radio" name="q3" value="a" required> Perceptible</label>
+                                <label><input type="radio" name="q3" value="b"> Robusto</label>
+                                <label><input type="radio" name="q3" value="c"> Operable</label>
+                            </fieldset>
+                            <button class="button button-dark" type="submit">Revisar respuestas <span aria-hidden="true">→</span></button>
+                            <p class="feedback" id="quizFeedback" role="status" aria-live="polite" aria-atomic="true"></p>
+                        </form>
+                    </section>
+
+                    <section class="activity-card notes-card" aria-labelledby="notes-title">
+                        <div class="activity-heading">
+                            <span class="activity-icon" aria-hidden="true">✎</span>
+                            <div>
+                                <p class="eyebrow eyebrow-dark">TU BITÁCORA</p>
+                                <h3 id="notes-title">Guarda una idea</h3>
+                            </div>
+                        </div>
+                        <p class="notes-intro" id="notesDescription">Anota una pregunta, ejemplo o idea clave. La encontrarás aquí aunque cierres esta página.</p>
+                        <form id="noteForm">
+                            <label class="visually-hidden" for="noteInput">Escribe una nota de estudio</label>
+                            <textarea id="noteInput" rows="3" maxlength="240" aria-describedby="notesDescription characterCount" placeholder="Ej.: El service worker guarda archivos para abrirlos offline." required></textarea>
+                            <div class="note-form-footer">
+                                <span id="characterCount" aria-live="off">0 / 240</span>
+                                <button class="button button-outline" type="submit">Guardar nota <span aria-hidden="true">＋</span></button>
+                            </div>
+                            <p class="feedback" id="noteFeedback" role="status" aria-live="polite" aria-atomic="true"></p>
+                        </form>
+                        <div class="saved-notes">
+                            <div class="saved-notes-heading">
+                                <h4>Notas guardadas</h4>
+                                <span id="notesCount" aria-live="polite" aria-atomic="true">0</span>
+                            </div>
+                            <ul id="notesList" class="notes-list" aria-live="polite" aria-relevant="additions removals">
+                                <li class="empty-note">Tus ideas aparecerán aquí.</li>
+                            </ul>
+                            <p class="storage-status" id="storageStatus" role="status" aria-live="polite" aria-atomic="true">Preparando almacenamiento local…</p>
+                        </div>
+                    </section>
+                </div>
+                <p class="practice-footnote">Este sitio no necesita conexión para mostrar la guía, resolver el reto ni consultar las notas guardadas.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <a class="brand footer-brand" href="#inicio">
+            <span class="brand-mark" aria-hidden="true">◎</span>
+            <span>AULA <strong>SIN SEÑAL</strong></span>
+        </a>
+        <p>Hecho para aprender, con o sin conexión.</p>
+        <a class="back-to-top" href="#inicio">Volver arriba ↑</a>
+    </footer>
+    <p class="visually-hidden" id="themeStatus" role="status" aria-live="polite" aria-atomic="true"></p>
+</body>
+</html>

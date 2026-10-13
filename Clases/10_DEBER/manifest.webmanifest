@@ -1,0 +1,19 @@
+{
+    "name": "Aula sin señal",
+    "short_name": "Aula offline",
+    "description": "Guía interactiva para aprender cómo funciona una página web sin conexión.",
+    "lang": "es",
+    "start_url": "./",
+    "scope": "./",
+    "display": "standalone",
+    "background_color": "#f7f7f2",
+    "theme_color": "#102a2a",
+    "icons": [
+        {
+            "src": "assets/icon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ]
+}
