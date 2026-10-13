@@ -30,9 +30,12 @@ La guía se puede consultar sin hacer solicitudes a servicios externos. El cuest
 
 Es posible crear una experiencia web útil sin conexión al combinar archivos locales, almacenamiento del navegador y una estrategia de caché. La información local debe manejarse con cuidado y no sustituye la copia de seguridad ni la validación del servidor. Además, la navegación por teclado, los mensajes claros y el diseño adaptable hacen que la aplicación sea más accesible.
 
-## Bibliografía
+## Referencias
 
-- Material de clase, *Resumen de clases: Desarrollo Basado en Plataformas*, PUCE, 2026.
-- MDN Web Docs. “Service Worker API”. https://developer.mozilla.org/docs/Web/API/Service_Worker_API
-- MDN Web Docs. “IndexedDB API”. https://developer.mozilla.org/docs/Web/API/IndexedDB_API
-- MDN Web Docs. “Progressive web apps”. https://developer.mozilla.org/docs/Web/Progressive_web_apps
+MDN contributors. (s. f.-a). *IndexedDB API*. MDN Web Docs. Recuperado el 12 de octubre de 2026, de https://developer.mozilla.org/docs/Web/API/IndexedDB_API
+
+MDN contributors. (s. f.-b). *Progressive web apps*. MDN Web Docs. Recuperado el 12 de octubre de 2026, de https://developer.mozilla.org/docs/Web/Progressive_web_apps
+
+MDN contributors. (s. f.-c). *Service Worker API*. MDN Web Docs. Recuperado el 12 de octubre de 2026, de https://developer.mozilla.org/docs/Web/API/Service_Worker_API
+
+*Resumen de clases: Desarrollo basado en plataformas*. (2026). [Apuntes de clase no publicados]. Pontificia Universidad Católica del Ecuador.
