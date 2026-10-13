@@ -1,46 +1,47 @@
-# Enlace: ubicación en tiempo real
+# Enlace: compartir y monitorear ubicación
 
-Aplicación web para compartir la ubicación GPS de un teléfono con permiso explícito y observar los dispositivos activos en un mapa de Google Maps. La vista y los estilos forman la Vista; `app.js` coordina la interacción (Controlador); `firebase.js` gestiona autenticación y persistencia en Firebase (Modelo).
+Aplicación web con dos interfaces independientes:
+
+- `index.html`: interfaz para que cada persona comparta su propia ubicación tras dar permiso al navegador.
+- `admin.html`: panel privado para que administradores autenticados monitoreen las ubicaciones activas en una lista y un mapa.
 
 ## Estructura
 
-- `index.html`: interfaz del panel y carga de los SDK web.
 - `assets/css/styles.css`: diseño adaptable a teléfono y computadora.
-- `assets/js/app.js`: permisos de GPS, controles, lista en vivo y marcadores/trayectorias.
-- `assets/js/firebase.js`: autenticación anónima y lecturas/escrituras en Realtime Database.
-- `assets/js/config.js`: claves y configuración que debes completar.
+- `assets/js/share.js`: permisos GPS y publicación de la ubicación del dispositivo.
+- `assets/js/admin.js`: inicio de sesión de administradores, lista en vivo y marcadores/trayectorias.
+- `assets/js/firebase.js`: autenticación y acceso a Realtime Database.
+- `assets/js/config.js`: claves y configuración de Firebase y Google Maps.
+- `database.rules.json`: reglas que restringen la lectura de ubicaciones al correo administrador configurado.
 
 ## Configuración
 
 1. Crea un proyecto en [Firebase Console](https://console.firebase.google.com/), registra una aplicación web y copia su configuración en `assets/js/config.js`.
-2. En Firebase Authentication, habilita el proveedor **Anónimo**.
-3. Crea una base de datos **Realtime Database**. Copia su URL `databaseURL` (por ejemplo, `https://<proyecto>-default-rtdb.firebaseio.com`) a la configuración.
-4. En **Reglas** de Realtime Database, usa estas reglas para la práctica. Los usuarios autenticados anónimamente pueden leer ubicaciones; cada dispositivo solo puede escribir o borrar la suya:
+2. En Firebase Authentication, habilita los proveedores **Anónimo** y **Correo electrónico/contraseña**.
+3. En Authentication, crea las cuentas de las personas administradoras. La página de administración no ofrece registro.
+4. En `database.rules.json`, reemplaza `admin@example.com` por el correo exacto de la cuenta administradora. Para permitir más cuentas, añade comparaciones de correo con `||`.
+5. Crea una base **Realtime Database** y copia su URL `databaseURL` a `assets/js/config.js`.
+6. Publica las reglas para tu proyecto Firebase:
 
-   ```json
-   {
-     "rules": {
-       "locations": {
-         ".read": "auth != null",
-         "$uid": {
-           ".write": "auth != null && auth.uid === $uid"
-         }
-       }
-     }
-   }
+   ```sh
+   firebase deploy --only database --project ID_DEL_PROYECTO
    ```
 
-5. En [Google Cloud Console](https://console.cloud.google.com/), habilita **Maps JavaScript API**, configura facturación si Google la solicita y crea una clave de API. Pega la clave en `MAPS_API_KEY`.
-6. Restringe la clave de Google Maps por sitios web (HTTP referrers) y limita las APIs autorizadas. No publiques las reglas abiertas de prueba de Firebase.
+   Este directorio incluye `firebase.json` para desplegar `database.rules.json`. Necesitas tener Firebase CLI instalado y usar el ID del proyecto correcto.
+7. En [Google Cloud Console](https://console.cloud.google.com/), habilita **Maps JavaScript API**, configura facturación si Google la solicita y coloca la clave en `MAPS_API_KEY`. Restringe la clave por sitios web (HTTP referrers) y limita las APIs autorizadas.
 
-Las claves web de Firebase y Google Maps se envían al navegador; no son contraseñas. La seguridad depende de las reglas de Firebase, las restricciones de la clave de Maps y los proveedores de autenticación habilitados.
+Las reglas permiten que cualquier sesión autenticada escriba únicamente bajo su propio UID; solo la cuenta cuyo correo está permitido puede leer las ubicaciones. La clave web de Firebase no sustituye las reglas de seguridad.
 
 ## Ejecutar
 
-Abre `index.html` con **Live Server** desde VS Code o sirve esta carpeta por HTTPS. No abras el archivo directamente con `file://`: los módulos y la geolocalización necesitan un origen seguro (`localhost` también sirve). Abre la página en el teléfono y en la computadora; en el teléfono pulsa **Empezar a compartir** y concede permiso. La computadora mostrará los registros de Firebase y el mapa se centrará en las ubicaciones recibidas.
+Sirve esta carpeta por HTTPS o ábrela con **Live Server** en VS Code (`localhost` también es origen seguro). No uses `file://`: los módulos JavaScript y la geolocalización requieren un origen seguro.
 
-El GPS y la escritura a Firebase se solicitan cada 1000 ms mientras la página está activa. Algunos teléfonos limitan temporizadores y GPS cuando una pestaña queda en segundo plano, el dispositivo entra en reposo o pierde conexión. Al pulsar **Dejar de compartir** se borra la ubicación de ese dispositivo; Firebase también la elimina al desconectarse normalmente.
+- Comparte `index.html` con los participantes; desde esa página pueden iniciar o detener el envío de su dispositivo.
+- Comparte `admin.html` únicamente con administradores; deberán iniciar sesión con las cuentas creadas en Firebase.
+- El mapa requiere que la clave de Google Maps esté configurada.
 
-## Privacidad y uso real
+Al detener el envío se elimina de Firebase la ubicación del dispositivo. Firebase también la elimina al desconectarse normalmente. Algunos teléfonos limitan temporizadores y GPS cuando una pestaña queda en segundo plano, el dispositivo entra en reposo o pierde conexión.
 
-La autorización del navegador controla el acceso al GPS, no quién puede ver las ubicaciones. Con las reglas de práctica, cualquier usuario que inicie sesión anónimamente en este proyecto puede leer los datos compartidos. Úsalo solo con personas que hayan aceptado participar; para producción, añade cuentas, autorización por grupos o invitaciones, retención limitada y una política de privacidad. El acceso anónimo identifica el navegador, no verifica la identidad de la persona.
+## Privacidad
+
+El panel requiere inicio de sesión y las reglas de Realtime Database son las que aplican el permiso de lectura en el servidor. No dejes las reglas de prueba abiertas: despliega `database.rules.json` con las direcciones correctas antes de compartir ubicaciones.

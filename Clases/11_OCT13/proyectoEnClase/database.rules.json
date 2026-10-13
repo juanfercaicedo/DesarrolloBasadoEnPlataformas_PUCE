@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "locations": {
+      ".read": "auth != null && auth.token.email === 'admin@example.com'",
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    }
+  }
+}

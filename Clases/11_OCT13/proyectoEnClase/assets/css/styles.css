@@ -104,8 +104,14 @@ button, input { font: inherit; }
 .connection-pill.is-connected { color: var(--green-dark); background: var(--green-pale); }
 .connection-pill.is-connected .connection-dot, .legend-dot, .person-status { background: var(--green); }
 .connection-pill.is-error { color: #a34434; background: #fff0eb; }
+.admin-link { color: var(--green-dark); font-size: 10px; font-weight: 800; text-decoration: none; white-space: nowrap; }
+.admin-link:hover { text-decoration: underline; }
 
 .workspace { max-width: 1512px; margin: 0 auto; padding: 35px clamp(20px, 5vw, 76px) 27px; }
+.share-workspace { max-width: 850px; }
+.share-workspace .share-panel { max-width: 600px; }
+.share-workspace .privacy-note { max-width: 600px; margin-top: 13px; }
+.admin-workspace { max-width: 1512px; }
 
 .workspace-heading {
     display: flex;
@@ -150,6 +156,8 @@ h1 span { color: var(--green); }
 .button-share:disabled { cursor: not-allowed; opacity: .55; }
 .button-stop { color: #a34434; background: #fff0eb; }
 .button-stop:hover { background: #ffe3da; }
+.button-logout { width: auto; min-height: 34px; padding: 0 10px; color: #a34434; background: #fff0eb; font-size: 10px; }
+.button-logout:hover { background: #ffe3da; }
 .button-symbol { font-size: 17px; line-height: 1; }
 .share-status { min-height: 16px; margin: 10px 0 12px; color: var(--muted); font-size: 10px; line-height: 1.5; }
 .share-status.is-sharing { color: var(--green-dark); }
@@ -162,7 +170,9 @@ h1 span { color: var(--green); }
 .gps-details strong { color: #516058; font-family: var(--mono); font-size: 9px; font-weight: 500; }
 
 .people-panel { min-height: 220px; flex: 1; padding-top: 17px; padding-bottom: 12px; }
+.people-panel[hidden], .admin-dashboard[hidden], .button-logout[hidden] { display: none; }
 .people-heading { padding-bottom: 13px; border-bottom: 1px solid var(--line); }
+.people-caption { margin: 9px 0 12px; color: var(--muted); font-size: 10px; line-height: 1.5; }
 .people-count { min-width: 25px; padding: 4px 6px; color: var(--green-dark); background: var(--green-pale); font-family: var(--mono); font-size: 10px; text-align: center; }
 .people-list { max-height: 280px; overflow-y: auto; margin: 0; padding: 0; list-style: none; }
 .empty-state { padding: 18px 3px; color: var(--muted); font-size: 11px; line-height: 1.6; }
@@ -173,6 +183,11 @@ h1 span { color: var(--green); }
 .person-details strong { overflow: hidden; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
 .person-details > span { overflow: hidden; color: var(--muted); font-family: var(--mono); font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
 .person-status { width: 6px; height: 6px; flex-basis: 6px; }
+.admin-login { max-width: 430px; }
+.admin-login h2 { margin: 0 0 20px; font-size: 18px; }
+.login-password-label { margin-top: 14px; }
+.login-submit { margin-top: 18px; }
+.admin-login .share-status { margin-bottom: 0; }
 .privacy-note { display: flex; align-items: flex-start; gap: 9px; margin: 0; padding: 2px 3px; color: #64726a; font-size: 9px; line-height: 1.7; }
 .privacy-note > span { width: 15px; height: 15px; flex: 0 0 15px; display: grid; place-items: center; border: 1px solid #aab7ae; border-radius: 50%; font-family: var(--mono); font-size: 9px; }
 
@@ -204,9 +219,11 @@ h1 span { color: var(--green); }
 
 @media (max-width: 700px) {
     .topbar { height: 60px; padding: 0 17px; }
-    .topbar-right { gap: 10px; }
+    .topbar-right { gap: 7px; }
     .privacy-label { display: none; }
-    .connection-pill { padding: 7px 9px; font-size: 9px; }
+    .connection-pill { gap: 5px; padding: 6px 7px; font-size: 8px; }
+    .admin-link { font-size: 8px; }
+    .button-logout { padding: 0 5px; font-size: 8px; }
     .workspace { padding: 27px 16px 22px; }
     .workspace-heading { align-items: flex-start; margin-bottom: 19px; }
     h1 { max-width: 260px; font-size: 28px; }
@@ -220,6 +237,8 @@ h1 span { color: var(--green); }
     .sidebar { grid-row: 2; }
     .map-toolbar { min-height: 60px; padding: 0 13px; }
     .map-canvas { min-height: 360px; }
+    .admin-dashboard .map-panel { grid-row: 1; }
+    .admin-dashboard .sidebar { grid-row: 2; }
     .site-footer { align-items: flex-start; flex-direction: column; justify-content: center; gap: 5px; padding: 12px 17px; font-size: 8px; }
 }
 

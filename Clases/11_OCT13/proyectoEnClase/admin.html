@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f3f5ef">
+    <meta name="description" content="Panel privado para monitorear ubicaciones compartidas.">
+    <title>Enlace | Administración</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js" defer></script>
+    <script type="module" src="assets/js/admin.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <header class="topbar">
+        <a class="brand" href="index.html" aria-label="Enlace, compartir ubicación">
+            <span class="brand-icon" aria-hidden="true"><span></span></span>
+            <span>enlace<span class="brand-period">.</span></span>
+        </a>
+        <div class="topbar-right">
+            <a class="admin-link" href="index.html" aria-label="Compartir ubicación">Compartir</a>
+            <p class="connection-pill" id="connectionStatus" role="status" aria-live="polite">
+                <span class="connection-dot" aria-hidden="true"></span>
+                <span id="connectionText">Acceso requerido</span>
+            </p>
+            <button class="button button-logout" id="signOut" type="button" hidden>Cerrar sesión</button>
+        </div>
+    </header>
+
+    <main id="contenido">
+        <section class="workspace admin-workspace" aria-labelledby="page-title">
+            <div class="workspace-heading">
+                <div>
+                    <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span> ACCESO ADMINISTRATIVO <span class="eyebrow-divider">/</span> <span id="localClock">--:--:--</span></p>
+                    <h1 id="page-title">Monitoreo de <span>ubicaciones.</span></h1>
+                    <p class="page-description">Inicia sesión con una cuenta administradora autorizada para consultar los dispositivos activos.</p>
+                </div>
+                <div class="live-total" aria-live="polite" aria-atomic="true">
+                    <span class="live-total-number" id="peopleCount">00</span>
+                    <span class="live-total-label">DISPOSITIVOS<br>COMPARTIENDO</span>
+                </div>
+            </div>
+
+            <section class="panel admin-login" id="adminLogin" aria-labelledby="login-title">
+                <p class="section-kicker">SOLO ADMINISTRADORES</p>
+                <h2 id="login-title">Iniciar sesión</h2>
+                <form id="loginForm">
+                    <label class="field-label" for="adminEmail">Correo electrónico</label>
+                    <input class="text-field" id="adminEmail" type="email" autocomplete="username" required>
+                    <label class="field-label login-password-label" for="adminPassword">Contraseña</label>
+                    <input class="text-field" id="adminPassword" type="password" autocomplete="current-password" required>
+                    <button class="button button-share login-submit" id="signIn" type="submit">
+                        <span>Entrar al panel</span>
+                    </button>
+                </form>
+                <p class="share-status" id="loginStatus" role="status" aria-live="polite">Se requiere una cuenta administradora configurada en Firebase.</p>
+            </section>
+
+            <section class="dashboard admin-dashboard" id="adminDashboard" aria-label="Monitoreo de dispositivos" hidden>
+                <aside class="sidebar" aria-label="Personas compartiendo ubicación">
+                    <section class="panel people-panel" aria-labelledby="people-title">
+                        <div class="people-heading">
+                            <div>
+                                <p class="section-kicker">EN VIVO</p>
+                                <h2 id="people-title">Compartiendo</h2>
+                            </div>
+                            <span class="people-count" id="deviceCount">00</span>
+                        </div>
+                        <p class="people-caption">Selecciona una persona para centrar el mapa en su ubicación.</p>
+                        <ul class="people-list" id="peopleList" aria-live="polite" aria-relevant="additions removals text">
+                            <li class="empty-state">Esperando dispositivos que compartan ubicación.</li>
+                        </ul>
+                    </section>
+                </aside>
+
+                <section class="map-panel" aria-label="Mapa de ubicaciones en tiempo real">
+                    <div class="map-toolbar">
+                        <div class="map-title-group">
+                            <span class="map-pin" aria-hidden="true">⌖</span>
+                            <div>
+                                <h2>Mapa en vivo</h2>
+                                <p id="mapStatus">Esperando ubicaciones</p>
+                            </div>
+                        </div>
+                        <div class="map-legend"><span class="legend-dot"></span> Compartiendo</div>
+                    </div>
+                    <div class="map-canvas" id="mapCanvas" role="region" aria-label="Mapa interactivo de Google Maps">
+                        <div class="map-placeholder" id="mapPlaceholder">
+                            <span class="placeholder-crosshair" aria-hidden="true">⌖</span>
+                            <p>El mapa aparecerá aquí</p>
+                            <span>Configura la clave de Google Maps en assets/js/config.js</span>
+                        </div>
+                    </div>
+                    <div class="map-footer">
+                        <span>GOOGLE MAPS <span class="footer-separator">·</span> GPS</span>
+                        <span id="mapUpdated">SIN UBICACIONES RECIBIDAS</span>
+                    </div>
+                </section>
+            </section>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <span>ENLACE <span class="footer-separator">/</span> ADMINISTRACIÓN</span>
+        <span>Acceso y lectura de ubicaciones restringidos por las reglas de Firebase.</span>
+    </footer>
+</body>
+</html>
