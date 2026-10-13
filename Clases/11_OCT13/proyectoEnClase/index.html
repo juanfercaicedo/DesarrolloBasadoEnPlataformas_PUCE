@@ -79,6 +79,26 @@
                 </div>
             </section>
 
+            <section class="map-panel share-map-panel" aria-labelledby="own-map-title">
+                <div class="map-toolbar">
+                    <div class="map-title-group">
+                        <span class="map-pin" aria-hidden="true">⌖</span>
+                        <div>
+                            <h2 id="own-map-title">Tu ubicación</h2>
+                            <p id="ownMapStatus" role="status" aria-live="polite">Activa compartir para ver tu ubicación en el mapa.</p>
+                        </div>
+                    </div>
+                    <div class="map-legend"><span class="legend-dot"></span> Solo tú</div>
+                </div>
+                <div class="map-canvas" id="ownMapCanvas" role="region" aria-label="Mapa con tu ubicación actual">
+                    <div class="map-placeholder" id="ownMapPlaceholder">
+                        <span class="placeholder-crosshair" aria-hidden="true">⌖</span>
+                        <p>Tu ubicación aparecerá aquí</p>
+                        <span>Empieza a compartir y permite el acceso al GPS.</span>
+                    </div>
+                </div>
+            </section>
+
             <p class="privacy-note"><span aria-hidden="true">i</span> La ubicación se envía mientras compartes y se elimina al detener el envío. Se requiere HTTPS y permiso del navegador.</p>
         </section>
     </main>

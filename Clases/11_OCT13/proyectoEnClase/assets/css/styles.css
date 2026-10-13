@@ -108,9 +108,10 @@ button, input { font: inherit; }
 .admin-link:hover { text-decoration: underline; }
 
 .workspace { max-width: 1512px; margin: 0 auto; padding: 35px clamp(20px, 5vw, 76px) 27px; }
-.share-workspace { max-width: 850px; }
+.share-workspace { max-width: 1200px; }
 .share-workspace .share-panel { max-width: 600px; }
-.share-workspace .privacy-note { max-width: 600px; margin-top: 13px; }
+.share-workspace .privacy-note { margin-top: 13px; }
+.share-map-panel { min-height: 480px; margin-top: 17px; }
 .admin-workspace { max-width: 1512px; }
 
 .workspace-heading {
@@ -234,6 +235,7 @@ h1 span { color: var(--green); }
     .eyebrow { flex-wrap: wrap; gap: 6px; font-size: 8px; }
     .dashboard { grid-template-columns: 1fr; gap: 12px; }
     .map-panel { min-height: 440px; grid-row: 1; }
+    .share-map-panel { min-height: 420px; }
     .sidebar { grid-row: 2; }
     .map-toolbar { min-height: 60px; padding: 0 13px; }
     .map-canvas { min-height: 360px; }

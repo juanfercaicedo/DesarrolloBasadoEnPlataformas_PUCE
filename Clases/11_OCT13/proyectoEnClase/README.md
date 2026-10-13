@@ -4,6 +4,7 @@ Aplicación web con dos interfaces independientes:
 
 - `index.html`: interfaz para que cada persona comparta su propia ubicación tras dar permiso al navegador.
 - `admin.html`: panel privado para que administradores autenticados monitoreen las ubicaciones activas en una lista y un mapa.
+- En la página para compartir, el mapa muestra únicamente la posición GPS del dispositivo local; el navegador no solicita una lista de las ubicaciones de otras personas.
 
 ## Estructura
 
@@ -38,7 +39,7 @@ Sirve esta carpeta por HTTPS o ábrela con **Live Server** en VS Code (`localhos
 
 - Comparte `index.html` con los participantes; desde esa página pueden iniciar o detener el envío de su dispositivo.
 - Comparte `admin.html` únicamente con administradores; deberán iniciar sesión con las cuentas creadas en Firebase.
-- El mapa requiere que la clave de Google Maps esté configurada.
+- Ambos mapas requieren que la clave de Google Maps esté configurada. En la página para compartir, el mapa se centra en el dispositivo actual cuando se concede el permiso GPS.
 
 Al detener el envío se elimina de Firebase la ubicación del dispositivo. Firebase también la elimina al desconectarse normalmente. Algunos teléfonos limitan temporizadores y GPS cuando una pestaña queda en segundo plano, el dispositivo entra en reposo o pierde conexión.
 
