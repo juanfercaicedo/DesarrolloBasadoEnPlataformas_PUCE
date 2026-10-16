@@ -41,4 +41,38 @@
         - URI -> Sirve para identificar un recurso. Por ejemplo: `https://quinto.com/api/clientes`
             - Se forma por protocolo, almacenamiento, dominio 
         - URL -> serve para indicar donde está un recurso y como acceder a el. Por ejemplo: `https://ejemplo.com/productos/42`
-            - 
+- **Estilo arquitectónico:** organización general de un sistema y reglas sobre cómo se relacionan sus partes. Ejemplos: cliente-servidor, capas y microservicios.
+    - Diagrama de estilo cliente-servidor:
+      ```mermaid
+      flowchart LR
+          Cliente -->|solicitud| Servidor
+          Servidor -->|respuesta| Cliente
+      ```
+- **Patrón arquitectónico:** una solución reutilizable para organizar un sistema y resolver un problema arquitectónico frecuente. MVC (Modelo-Vista-Controlador) es un ejemplo; separa datos, interfaz y control de las acciones.
+    - Diagrama del patrón MVC:
+      ```mermaid
+      flowchart LR
+          Usuario --> Vista
+          Vista --> Controlador
+          Controlador --> Modelo
+          Modelo --> Vista
+          Vista --> Usuario
+      ```
+- **Patrones de diseño:** soluciones reutilizables para problemas comunes dentro del diseño del código; tienen un alcance menor que los patrones arquitectónicos.
+    - **Factory (fábrica):** centraliza la creación de objetos.
+    - **Observer (observador):** permite avisar a varios objetos cuando cambia otro objeto.
+    - **Strategy (estrategia):** permite intercambiar distintas maneras de realizar una tarea.
+- Al programar el sistema, debemos considerar la seguridad en el frontend, backend y en las bases de datos.
+     - En backend se pone seguridad HTTPS, 
+        - cors(quién puede entrar y qué puede hacer), 
+        - autorización(determinar el rol del usuario), 
+        - autenticación(verificar que los usuarios y contraseñas sean correctos antes de iniciar al sistema), 
+        - JWT(JSON web Token) es un formato de token que permite transmitir información entre sistemas, normalmente para identificar a un usuario después de iniciar sesión. En una autenticación típica, el servidor valida las credenciales y entrega un JWT. El cliente lo envía en solicitudes posteriores, a menudo en el encabezado Authorization: Bearer <token>, y el servidor lo valida para decidir si autoriza la acción.
+        - sanitización, para evitar las injecciones, valida los caracteres, se hace en el backend, fronted y bases de datos
+        - hash es un tipo de encriptación, se utiliza para todos los datos sensibles
+            - Aplicar una función a unos datos para obtener una cadena de longitud fija, llamada valor hash o resumen. Por ejemplo, se puede calcular el hash de un archivo y compararlo después para detectar si cambió.
+        - (Se debe poner en las API's antes de desplegar la web).
+## Aplicación vs Sistema vs Plataforma Digital
+- Aplicación: programa que permite realizar tareas concretas. Ejemplo: una app para pedir comida.
+- Sistema: conjunto de componentes que colaboran para cumplir un objetivo. Puede incluir la aplicación, el backend, la base de datos, usuarios y procesos.
+- Plataforma digital: entorno que ofrece servicios o herramientas para que varios usuarios, empresas o aplicaciones interactúen o construyan sobre él. Puede conectar distintos grupos y permitirles intercambiar valor.

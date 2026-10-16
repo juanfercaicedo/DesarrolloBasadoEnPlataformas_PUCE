@@ -6,4 +6,11 @@
 
 - **Deber:** Anotar los ejercicios hechos en clase, anotar lo que no entendemos y consultar a la página web dada en clase.
     - Auditorías, partes críticas analizar las soluciones con un color diferente.
-    
+
+- DEBER [19/10/2026]:
+    - Levantar los requerimientos de la página web(restaurante), levantar los requerimientos(Ingreso, encargo productos, paso al cajero, etc), tener el flujo de información claro
+    - Tipos de inventario
+    - Pantalla de punto de venta físico
+    - Transporte(para pedir o para llevar)
+    - Diagrama físico de la BD a mano(tamaño tipo plano)
+    - Programar el sistema de inventario en base al diagrama físico de BD
