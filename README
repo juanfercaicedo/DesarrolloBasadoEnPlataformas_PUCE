@@ -14,3 +14,15 @@
     - Transporte(para pedir o para llevar)
     - Diagrama físico de la BD a mano(tamaño tipo plano)
     - Programar el sistema de inventario en base al diagrama físico de BD
+
+- Cosas que va a preguntar en la presentación de la página web:
+    - Estilos arquitectónicos, patrones arquitectónicos, **patrones de diseño**
+- **Patrones de diseño**
+    - Patrones creacionales
+    - Patrones estructurales
+    - Patrones de comportamiento
+- Reto 3
+    - Capa de presentación
+        - No va a ser MVC, puede ser react, agular, API REST, etc.
+    - Anatomía de solicitud y respuesta [Semana8](./Clases/13_OCT27/notas.md)
+
