@@ -1,0 +1,5 @@
+- Para inicializar el servidor ocupamos: `node server.js`
+- Para tener la estructura necesaria: `npm init #`
+- Y luego para ocupar express:
+    - `npm install express`
+    - Y luego: `npm init #`
