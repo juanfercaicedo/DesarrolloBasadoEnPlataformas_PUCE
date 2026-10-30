@@ -1,0 +1,3 @@
+- Estamos ocupando el framework de express
+- `npm install express`
+- para inicializar el servidor y nos de el formato ocupamos: `npm init`, hacemos lo mismo cuando queramos ocupar express
