@@ -40,3 +40,15 @@
 [MVC](../Images/ModeloMVC.png)
 - La responsabilidad de una ruta es mapear un endpoint HTTP a su controlador
 
+## Tipos de Middleware
+- El middleware maneja la parte de seguridad, es decir que analiza las peticiones y las valida antes de pasar al controlador, en caso de que un usuario no esté autorizado, la petición no la pasa al controlador
+1. Middleware de CORS
+- Controla qué cliente puede acceder a la API.
+`res.header("Access-Control-Allow-Origin", origin);`
+2. Middleware de correlación
+- Genera un ID único por solicitud útil para debugging.
+`req.correlationId = "cid-abc123";`
+3. Middleware de contexto de usuario
+- Inserta req.user basado en encabezados enviados por el frontend.
+`req.user = { id: Number(id), rol };`
+- No solo es autenticación si no también autorización
