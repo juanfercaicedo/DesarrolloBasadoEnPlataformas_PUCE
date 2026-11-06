@@ -25,4 +25,6 @@
     - Capa de presentación
         - No va a ser MVC, puede ser react, agular, API REST, etc.
     - Anatomía de solicitud y respuesta [Semana8](./Clases/13_OCT27/notas.md)
+- Dar a la IA un prompt dando terminos técnicos para que genere una página web y luego tenemos que generar una página web dando un prompt haz una página web de ......
+    - Haz una página web utilizando un estilo arquitectónico monolítico, n-capas y cliente-servidor ........
 
