@@ -1,0 +1,12 @@
+<h2>Peliculas en Cartelera</h2>
+<div class="grid-peliculas">
+  <% peliculas.forEach(pelicula => { %>
+    <article class="card">
+      <img src="<%= pelicula.imagen %>" alt="<%= pelicula.titulo %>">
+      <h3><%= pelicula.titulo %></h3>
+      <p><strong>Género:</strong> <%= pelicula.genero %></p>
+      <p><strong>Duración:</strong> <%= pelicula.duracion %></p>
+      <a href="/pelicula/<%= pelicula.id %>" class="btn">Ver Detalle</a>
+    </article>
+  <% }) %>
+</div>
