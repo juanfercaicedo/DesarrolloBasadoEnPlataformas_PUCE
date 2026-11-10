@@ -36,9 +36,10 @@ let transactionPage = 1;
 let transactionTotal = 0;
 let transactionTotalPages = 0;
 let transactionLoading = false;
+const API_BASE_URL = 'http://localhost:5051';
 
 const request = async (url, options = {}) => {
-  const response = await fetch(url, {
+  const response = await fetch(`${API_BASE_URL}${url}`, {
     ...options,
     headers: {
       ...(options.body ? { 'Content-Type': 'application/json' } : {}),

@@ -80,14 +80,24 @@ La API especificada en `backend.md` se conecta a PostgreSQL y opera sobre la tab
 
 Las variables compartidas están en `.env`. Al clonar el proyecto, copia `.env.example` como `.env` y cambia `POSTGRES_PASSWORD`. El archivo `.env` local está excluido de Git.
 
-Desde la carpeta `backend`, instala dependencias e inicia el servidor:
+Desde la carpeta `backend`, instala dependencias e inicia la API:
 
 ```powershell
 npm install
-npm start
+node server.js
 ```
 
-La API queda disponible en `http://localhost:5051/api/productos`:
+La API queda disponible en `http://localhost:5051/api/productos`.
+
+El cliente estático no usa frameworks y se sirve en un proceso separado. En otra terminal, desde la carpeta `frontend`, ejecuta:
+
+```powershell
+node server.js
+```
+
+Abre `http://localhost:5052/`. El cliente se conecta a la API en el puerto `5051`.
+
+Rutas de la API:
 
 - `GET /api/productos`: lista productos.
 - `GET /api/productos/:id`: consulta un producto.
