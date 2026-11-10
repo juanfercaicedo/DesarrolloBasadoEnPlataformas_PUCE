@@ -8,7 +8,7 @@
 - Es una buena práctica utilizar frameworks siempre que no se manejen datos sensibles, es decir por ejemplo si tenemos que hacer una interfaz bancaria es mejor ocupar C# en vez de nest.js o node.js
 - Node.js funciona mediante "single-threaded, event-driven, non-blocking I/O"
 - Tenemos el event loop:
-[EventLoop](../Images/EventLoop.png)
+![EventLoop](../Images/EventLoop.png)
 - Hace que las aplicaciones del backend nunca fallen y que nunca se bloqueen entre sí
 - **EXPRESS**
     - Framwork más utilizado en node.js
@@ -37,7 +37,7 @@
 - Controladores
 - Modelos
 - Para cumplir MVC:
-[MVC](../Images/ModeloMVC.png)
+![MVC](../Images/ModeloMVC.png)
 - La responsabilidad de una ruta es mapear un endpoint HTTP a su controlador
 
 ## Tipos de Middleware
