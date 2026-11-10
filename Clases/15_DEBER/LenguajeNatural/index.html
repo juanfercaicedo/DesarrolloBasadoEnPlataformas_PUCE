@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineSphere - Tu Destino Cinematográfico</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            red: '#E50914',
+                            accent: '#FF2E93',
+                            purple: '#7928CA',
+                            dark: '#0A0A0C',
+                            card: '#121218',
+                            hover: '#1E1E28'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Estilos personalizados y scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0A0A0C;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27273A;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #E50914;
+        }
+        .glass-header {
+            background: rgba(10, 10, 12, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .glass-card {
+            background: rgba(18, 18, 24, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .hero-gradient {
+            background: linear-gradient(0deg, #0A0A0C 0%, rgba(10,10,12,0.6) 50%, rgba(10,10,12,0.3) 100%),
+                        linear-gradient(90deg, #0A0A0C 0%, rgba(10,10,12,0.8) 35%, transparent 100%);
+        }
+        .text-glow {
+            text-shadow: 0 0 20px rgba(229, 9, 20, 0.5);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-brand-dark text-gray-100 font-sans min-h-screen antialiased flex flex-col selection:bg-brand-red selection:text-white">
+
+    <!-- HEADER / NAVEGACIÓN -->
+    <header class="fixed top-0 left-0 right-0 z-40 glass-header border-b border-white/5 transition-all duration-300" id="mainHeader">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo & Nav Links -->
+                <div class="flex items-center gap-8">
+                    <a href="#" onclick="showSection('home')" class="flex items-center gap-2 group">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-red via-brand-accent to-brand-purple flex items-center justify-center shadow-lg shadow-brand-red/30 group-hover:scale-105 transition-transform">
+                            <i class="fa-solid font-black fa-play text-white text-lg ml-0.5"></i>
+                        </div>
+                        <span class="text-2xl font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-400">
+                            Cine<span class="text-brand-red">Sphere</span>
+                        </span>
+                    </a>
+
+                    <!-- Menú Desktop -->
+                    <nav class="hidden md:flex items-center gap-1 bg-white/5 p-1.5 rounded-full border border-white/10">
+                        <button onclick="filterCategory('all', this)" class="nav-btn px-4 py-1.5 rounded-full text-sm font-medium bg-brand-red text-white transition-all shadow-md">
+                            <i class="fa-solid fa-compass mr-1.5 text-xs"></i>Inicio
+                        </button>
+                        <button onclick="filterCategory('cartelera', this)" class="nav-btn px-4 py-1.5 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">
+                            En Cartelera
+                        </button>
+                        <button onclick="filterCategory('populares', this)" class="nav-btn px-4 py-1.5 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">
+                            Populares
+                        </button>
+                        <button onclick="filterCategory('proximos', this)" class="nav-btn px-4 py-1.5 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all">
+                            Próximos
+                        </button>
+                        <button onclick="showMyList(this)" class="nav-btn px-4 py-1.5 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all flex items-center gap-1.5">
+                            <i class="fa-solid fa-bookmark text-brand-red"></i>
+                            Mi Lista
+                            <span id="myListCount" class="bg-brand-red text-white text-xs font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- Buscador e Interacción -->
+                <div class="flex items-center gap-4">
+                    <!-- Search Bar -->
+                    <div class="relative">
+                        <input type="text" id="searchInput" placeholder="Buscar película, actor, género..." 
+                               oninput="handleSearch()"
+                               class="w-40 sm:w-64 bg-white/5 border border-white/10 rounded-full py-2 pl-10 pr-4 text-sm text-gray-200 placeholder-gray-400 focus:outline-none focus:border-brand-red focus:w-72 focus:bg-black/50 transition-all duration-300">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                        <button id="clearSearch" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white text-xs">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <!-- Botón Hamburguesa Móvil -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden text-gray-300 hover:text-white p-2">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menú Móvil desplegable -->
+        <div id="mobileMenu" class="hidden md:hidden bg-brand-card/95 border-b border-white/10 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="filterCategory('all'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg text-base font-medium text-white hover:bg-white/10">Inicio</button>
+            <button onclick="filterCategory('cartelera'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg text-base font-medium text-gray-300 hover:bg-white/10">En Cartelera</button>
+            <button onclick="filterCategory('populares'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg text-base font-medium text-gray-300 hover:bg-white/10">Populares</button>
+            <button onclick="filterCategory('proximos'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg text-base font-medium text-gray-300 hover:bg-white/10">Próximos Estrenos</button>
+            <button onclick="showMyList(); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-lg text-base font-medium text-gray-300 hover:bg-white/10 flex items-center justify-between">
+                <span>Mi Lista</span>
+                <span id="mobileListCount" class="bg-brand-red text-white text-xs px-2 py-0.5 rounded-full">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="flex-grow pt-20">
+
+        <!-- HERO BANNER (Película Destacada) -->
+        <section id="heroSection" class="relative w-full min-h-[75vh] lg:min-h-[85vh] flex items-center overflow-hidden">
+            <!-- Background Image -->
+            <div class="absolute inset-0 z-0">
+                <img id="heroBg" src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1920&auto=format&fit=crop" 
+                     alt="Hero Banner" class="w-full h-full object-cover object-center transition-all duration-700 filter brightness-75">
+                <div class="absolute inset-0 hero-gradient"></div>
+            </div>
+
+            <!-- Content -->
+            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col justify-end min-h-[60vh]">
+                <div class="max-w-2xl space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="bg-brand-red/90 text-white text-xs font-bold px-3 py-1 rounded-md uppercase tracking-wider shadow-lg shadow-brand-red/40 flex items-center gap-1.5">
+                            <i class="fa-solid fa-fire text-yellow-300"></i> Película Destacada
+                        </span>
+                        <span id="heroGenre" class="bg-white/10 backdrop-blur-md border border-white/20 text-gray-200 text-xs font-medium px-3 py-1 rounded-md">
+                            Sci-Fi / Acción
+                        </span>
+                    </div>
+
+                    <h1 id="heroTitle" class="text-4xl sm:text-6xl font-black tracking-tight text-white leading-none text-glow">
+                        Cyber Odyssey 2099
+                    </h1>
+
+                    <div class="flex items-center gap-4 text-sm text-gray-300 font-medium">
+                        <div class="flex items-center text-amber-400 gap-1">
+                            <i class="fa-solid fa-star"></i>
+                            <span id="heroRating" class="font-bold text-white">4.9</span>/5.0
+                        </div>
+                        <span>•</span>
+                        <span id="heroYear">2026</span>
+                        <span>•</span>
+                        <span id="heroDuration">2h 35m</span>
+                        <span>•</span>
+                        <span class="border border-white/30 text-xs px-1.5 py-0.5 rounded text-gray-300">4K Ultra HD</span>
+                    </div>
+
+                    <p id="heroSynopsis" class="text-gray-300 text-base sm:text-lg line-clamp-3 leading-relaxed font-normal max-w-xl">
+                        En una metrópolis distópica regida por inteligencia artificial, una hacker rebelde descubre un secreto primordial que podría restaurar la humanidad o extinguirla para siempre.
+                    </p>
+
+                    <div class="pt-4 flex flex-wrap items-center gap-4">
+                        <button id="heroPlayBtn" onclick="openTrailerModal('hero')" 
+                                class="bg-gradient-to-r from-brand-red to-brand-accent hover:from-red-600 hover:to-pink-600 text-white font-bold px-7 py-3.5 rounded-xl shadow-lg shadow-brand-red/40 hover:shadow-brand-red/60 hover:scale-105 active:scale-95 transition-all duration-200 flex items-center gap-3">
+                            <i class="fa-solid fa-play text-lg"></i> Ver Tráiler
+                        </button>
+
+                        <button id="heroListBtn" onclick="toggleHeroList()" 
+                                class="glass-card hover:bg-white/20 text-white font-semibold px-6 py-3.5 rounded-xl transition-all duration-200 flex items-center gap-2">
+                            <i id="heroListIcon" class="fa-solid fa-plus text-lg"></i> 
+                            <span id="heroListText">Añadir a Mi Lista</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FILTROS POR GÉNERO -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xs uppercase font-extrabold tracking-widest text-gray-400 flex items-center gap-2">
+                    <i class="fa-solid fa-filter text-brand-red"></i> Filtrar por Género
+                </h3>
+            </div>
+            
+            <div class="flex items-center gap-2 overflow-x-auto pb-4 hide-scrollbar">
+                <button onclick="filterByGenre('all', this)" class="genre-btn bg-brand-red text-white px-5 py-2 rounded-xl text-sm font-semibold whitespace-nowrap shadow-md transition-all">
+                    Todos los géneros
+                </button>
+                <button onclick="filterByGenre('Acción', this)" class="genre-btn glass-card text-gray-300 hover:text-white hover:bg-white/10 px-5 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all">
+                    ⚡ Acción
+                </button>
+                <button onclick="filterByGenre('Sci-Fi', this)" class="genre-btn glass-card text-gray-300 hover:text-white hover:bg-white/10 px-5 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all">
+                    🚀 Sci-Fi
+                </button>
+                <button onclick="filterByGenre('Drama', this)" class="genre-btn glass-card text-gray-300 hover:text-white hover:bg-white/10 px-5 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all">
+                    🎭 Drama
+                </button>
+                <button onclick="filterByGenre('Terror', this)" class="genre-btn glass-card text-gray-300 hover:text-white hover:bg-white/10 px-5 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all">
+                    👻 Terror
+                </button>
+                <button onclick="filterByGenre('Comedia', this)" class="genre-btn glass-card text-gray-300 hover:text-white hover:bg-white/10 px-5 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all">
+                    😂 Comedia
+                </button>
+                <button onclick="filterByGenre('Animación', this)" class="genre-btn glass-card text-gray-300 hover:text-white hover:bg-white/10 px-5 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all">
+                    🎨 Animación
+                </button>
+                <button onclick="filterByGenre('Romance', this)" class="genre-btn glass-card text-gray-300 hover:text-white hover:bg-white/10 px-5 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all">
+                    ❤️ Romance
+                </button>
+            </div>
+        </section>
+
+        <!-- CATALOGO DE PELÍCULAS DINÁMICO -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+            
+            <!-- Título de sección dinámica -->
+            <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                <div>
+                    <h2 id="sectionTitle" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                        Películas Destacadas
+                    </h2>
+                    <p id="sectionSubtitle" class="text-sm text-gray-400 mt-1">Explora las mejores superproducciones seleccionadas para ti</p>
+                </div>
+                <span id="resultsCount" class="text-xs font-semibold bg-white/10 text-gray-300 px-3 py-1.5 rounded-full border border-white/10">
+                    12 películas
+                </span>
+            </div>
+
+            <!-- Grid de Películas -->
+            <div id="moviesGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+                <!-- Se rellena dinámicamente con JavaScript -->
+            </div>
+
+            <!-- Estado sin resultados -->
+            <div id="noResults" class="hidden text-center py-16 space-y-4">
+                <div class="w-20 h-20 mx-auto bg-white/5 rounded-full flex items-center justify-center text-gray-500 text-3xl">
+                    <i class="fa-solid fa-film-slash"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-300">No encontramos películas que coincidan</h3>
+                <p class="text-sm text-gray-500 max-w-md mx-auto">Prueba buscando con otro término o seleccionando un género diferente en los filtros.</p>
+                <button onclick="resetFilters()" class="bg-brand-red text-white text-sm font-semibold px-6 py-2.5 rounded-xl hover:bg-red-700 transition-all">
+                    Restablecer Filtros
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-black border-t border-white/10 mt-20 text-gray-400 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg bg-brand-red flex items-center justify-center text-white font-bold text-sm">
+                            <i class="fa-solid fa-play"></i>
+                        </div>
+                        <span class="text-xl font-extrabold text-white">Cine<span class="text-brand-red">Sphere</span></span>
+                    </div>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        Tu portal cinematográfico definitivo. Las últimas reseñas, tráilers en alta definición y una biblioteca personalizada al alcance de un solo clic.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Navegación</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#" onclick="filterCategory('cartelera')" class="hover:text-white transition-colors">Cartelera Actual</a></li>
+                        <li><a href="#" onclick="filterCategory('populares')" class="hover:text-white transition-colors">Películas Populares</a></li>
+                        <li><a href="#" onclick="filterCategory('proximos')" class="hover:text-white transition-colors">Próximos Estrenos</a></li>
+                        <li><a href="#" onclick="showMyList()" class="hover:text-white transition-colors">Mi Lista Personal</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Géneros Populares</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#" onclick="filterByGenre('Acción')" class="hover:text-white transition-colors">Acción & Aventura</a></li>
+                        <li><a href="#" onclick="filterByGenre('Sci-Fi')" class="hover:text-white transition-colors">Ciencia Ficción</a></li>
+                        <li><a href="#" onclick="filterByGenre('Drama')" class="hover:text-white transition-colors">Drama Emotivo</a></li>
+                        <li><a href="#" onclick="filterByGenre('Terror')" class="hover:text-white transition-colors">Terror & Suspenso</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Síguenos</h4>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-brand-red hover:text-white transition-all">
+                            <i class="fa-brands fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-brand-red hover:text-white transition-all">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-brand-red hover:text-white transition-all">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-white/5 text-center text-xs text-gray-600 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p>&copy; 2026 CineSphere Inc. Todos los derechos reservados.</p>
+                <p class="flex items-center gap-1">Diseñado con <i class="fa-solid fa-heart text-brand-red"></i> para amantes del séptimo arte.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL DETALLES DE PELÍCULA Y COMENTARIOS -->
+    <div id="movieModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-md overflow-y-auto">
+        <div class="relative w-full max-w-4xl bg-brand-card rounded-2xl border border-white/10 overflow-hidden shadow-2xl my-8 text-gray-200 animate-fadeIn">
+            
+            <!-- Botón Cerrar -->
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-20 w-10 h-10 bg-black/60 hover:bg-brand-red text-white rounded-full flex items-center justify-center backdrop-blur-md border border-white/20 transition-all">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Media Banner (Video Tráiler o Imagen Backdrop) -->
+            <div id="modalMediaContainer" class="relative w-full aspect-video bg-black">
+                <!-- Se inyecta tráiler embebido o póster -->
+            </div>
+
+            <!-- Modal Content -->
+            <div class="p-6 sm:p-8 space-y-6">
+                <!-- Encabezado Modal -->
+                <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span id="modalGenre" class="bg-brand-red/20 text-brand-red font-semibold text-xs px-2.5 py-1 rounded-md border border-brand-red/30"></span>
+                            <span id="modalYear" class="text-xs text-gray-400 font-medium"></span>
+                            <span class="text-gray-500">•</span>
+                            <span id="modalDuration" class="text-xs text-gray-400 font-medium"></span>
+                        </div>
+                        <h2 id="modalTitle" class="text-3xl font-extrabold text-white tracking-tight"></h2>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <button id="modalFavBtn" class="px-4 py-2 rounded-xl text-sm font-semibold border border-white/10 bg-white/5 hover:bg-white/10 transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-bookmark"></i>
+                            <span id="modalFavText">Añadir a lista</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Puntuación y Reparto -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 border-y border-white/10 py-4">
+                    <div class="space-y-1">
+                        <span class="text-xs text-gray-400 uppercase font-bold tracking-wider">Calificación</span>
+                        <div class="flex items-center gap-2">
+                            <div class="flex text-amber-400 text-sm" id="modalStars"></div>
+                            <span id="modalRatingText" class="font-extrabold text-white text-lg"></span>
+                        </div>
+                    </div>
+                    <div class="space-y-1 md:col-span-2">
+                        <span class="text-xs text-gray-400 uppercase font-bold tracking-wider">Reparto Principal</span>
+                        <p id="modalCast" class="text-sm text-gray-300 font-medium"></p>
+                    </div>
+                </div>
+
+                <!-- Sinopsis -->
+                <div class="space-y-2">
+                    <h4 class="text-sm font-bold text-white uppercase tracking-wider">Sinopsis</h4>
+                    <p id="modalSynopsis" class="text-gray-300 text-sm sm:text-base leading-relaxed"></p>
+                </div>
+
+                <!-- SECCIÓN DE RESEÑAS Y COMENTARIOS -->
+                <div class="space-y-6 pt-4 border-t border-white/10">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-comments text-brand-red"></i> Reseñas de la Comunidad
+                    </h3>
+
+                    <!-- Formulario para dejar comentario -->
+                    <form id="commentForm" onsubmit="submitComment(event)" class="bg-white/5 p-4 rounded-xl border border-white/10 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <label class="text-xs font-semibold text-gray-300">Deja tu reseña:</label>
+                            <!-- Selector de Calificación por estrellas -->
+                            <div class="flex items-center gap-1 text-gray-500 cursor-pointer" id="ratingPicker">
+                                <i class="fa-solid fa-star hover:text-amber-400 transition-colors" data-rating="1" onclick="setFormRating(1)"></i>
+                                <i class="fa-solid fa-star hover:text-amber-400 transition-colors" data-rating="2" onclick="setFormRating(2)"></i>
+                                <i class="fa-solid fa-star hover:text-amber-400 transition-colors" data-rating="3" onclick="setFormRating(3)"></i>
+                                <i class="fa-solid fa-star hover:text-amber-400 transition-colors" data-rating="4" onclick="setFormRating(4)"></i>
+                                <i class="fa-solid fa-star hover:text-amber-400 transition-colors" data-rating="5" onclick="setFormRating(5)"></i>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <input type="text" id="reviewerName" placeholder="Tu nombre o alias" required
+                                   class="bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-brand-red">
+                        </div>
+
+                        <textarea id="reviewerComment" rows="2" placeholder="¿Qué te pareció esta película?" required
+                                  class="w-full bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-brand-red"></textarea>
+
+                        <div class="flex justify-end">
+                            <button type="submit" class="bg-brand-red hover:bg-red-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition-all shadow-md">
+                                Publicar Reseña
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Lista de Comentarios -->
+                    <div id="commentsList" class="space-y-3 max-h-60 overflow-y-auto pr-2">
+                        <!-- Se insertan comentarios dinámicamente -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT DE LA APLICACIÓN -->
+    <script>
+        // BASE DE DATOS DE PELÍCULAS (Mock Data enriquecido)
+        const MOVIES_DATABASE = [
+            {
+                id: 'm1',
+                title: 'Cyber Odyssey 2099',
+                category: 'cartelera',
+                genre: 'Sci-Fi',
+                rating: 4.9,
+                year: 2026,
+                duration: '2h 35m',
+                poster: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=800&auto=format&fit=crop',
+                backdrop: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1920&auto=format&fit=crop',
+                trailerUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1',
+                synopsis: 'En una metrópolis distópica regida por inteligencia artificial, una hacker rebelde descubre un secreto primordial que podría restaurar la humanidad o extinguirla para siempre.',
+                cast: 'Elena Rostova, David Vance, Marcus Thorne',
+                reviews: [
+                    { name: 'Carlos M.', rating: 5, comment: 'Visualmente impresionante. Efectos especiales que marcan época.' },
+                    { name: 'Sofia R.', rating: 4, comment: 'Gran argumento de ciencia ficción cyberpunk.' }
+                ]
+            },
+            {
+                id: 'm2',
+                title: 'Sombras del Pasado',
+                category: 'populares',
+                genre: 'Drama',
+                rating: 4.7,
+                year: 2025,
+                duration: '1h 58m',
+                poster: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=800&auto=format&fit=crop',
+                backdrop: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=1920&auto=format&fit=crop',
+                trailerUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1',
+                synopsis: 'Un detective retirado debe enfrentar sus propios demonios del pasado cuando reaparece un antiguo caso no resuelto que amenaza con destruir a su familia.',
+                cast: 'Robert De Sterling, Anna Paquin, John Hawkes',
+                reviews: [
+                    { name: 'Lucía G.', rating: 5, comment: 'Actuaciones magistrales. Mantendrá tus emociones al límite.' }
+                ]
+            },
+            {
+                id: 'm3',
+                title: 'El Despertar de las Sombras',
+                category: 'cartelera',
+                genre: 'Terror',
+                rating: 4.3,
+                year: 2026,
+                duration: '1h 42m',
+                poster: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=800&auto=format&fit=crop',
+                backdrop: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=1920&auto=format&fit=crop',
+                trailerUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1',
+                synopsis: 'Un grupo de arqueólogos explora un antiguo templo olvidado bajo los Cárpatos y desata inadvertidamente una entidad cósmica sedienta de almas.',
+                cast: 'Sarah Connor, Michael Fass, Mia Goth',
+                reviews: [
+                    { name: 'Andrés P.', rating: 4, comment: 'Atmósfera aterradora y buen ritmo narrativo.' }
+                ]
+            },
+            {
+                id: 'm4',
+                title: 'Risas en la Ciudad',
+                category: 'populares',
+                genre: 'Comedia',
+                rating: 4.5,
+                year: 2025,
+                duration: '1h 35m',
+                poster: 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?q=80&w=800&auto=format&fit=crop',
+                backdrop: 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?q=80&w=1920&auto=format&fit=crop',
+                trailerUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1',
+                synopsis: 'Dos desconocidos totalmente opuestos terminan varados en la misma ciudad durante las vacaciones navideñas, desencadenando una serie de malentendidos hilarantes.',
+                cast: 'Ryan Gosling, Emma Stone, Jonah Hill',
+                reviews: [
+                    { name: 'Valeria K.', rating: 5, comment: 'Me reí de principio a fin. Excelente química entre los actores.' }
+                ]
+            },
+            {
+                id: 'm5',
+                title: 'Horizonte Estelar: Invasión',
+                category: 'proximos',
+                genre: 'Acción',
+                rating: 4.8,
+                year: 2026,
+                duration: '2h 15m',
+                poster: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800&auto=format&fit=crop',
+                backdrop: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop',
+                trailerUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1',
+                synopsis: 'La Tierra enfrenta su mayor amenaza cuando una armada alienígena destruye las defensas de la órbita. Un escuadrón de élite intentará una misión suicida contra la nave nodriza.',
+                cast: 'Chris Pratt, Zoe Saldana, Idris Elba',
+                reviews: []
+            },
+            {
+                id: 'm6',
+                title: 'Crónicas de Fantasía',
+                category: 'cartelera',
+                genre: 'Animación',
+                rating: 4.9,
+                year: 2026,
+                duration: '1h 50m',
+                poster: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=800&auto=format&fit=crop',
+                backdrop: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1920&auto=format&fit=crop',
+                trailerUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1',
+                synopsis: 'Un joven zorro con el poder de manipular los elementos emprende una travesía mágica para restaurar el equilibrio de su bosque ancestral.',
+                cast: 'Voz de Tom Holland, Zendaya, Guillermo del Toro',
+                reviews: [
+                    { name: 'Mateo R.', rating: 5, comment: 'Una joya de la animación moderna. Directa al corazón.' }
+                ]
+            },
+            {
+                id: 'm7',
+                title: 'El Último Atardecer',
+                category: 'populares',
+                genre: 'Romance',
+                rating: 4.6,
+                year: 2025,
+                duration: '2h 05m',
+                poster: 'https://images.unsplash.com/photo-1518676599626-5cd8c2d43a53?q=80&w=800&auto=format&fit=crop',
+                backdrop: 'https://images.unsplash.com/photo-1518676599626-5cd8c2d43a53?q=80&w=1920&auto=format&fit=crop',
+                trailerUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1',
+                synopsis: 'Dos artistas se conocen en las playas de Santorini durante el verano y viven un romance apasionado marcado por un destino inminente que cambiará sus vidas.',
+                cast: 'Timothée Chalamet, Florence Pugh',
+                reviews: []
+            },
+            {
+                id: 'm8',
+                title: 'Misión Cero',
+                category: 'proximos',
+                genre: 'Acción',
+                rating: 4.4,
+                year: 2026,
+                duration: '2h 10m',
+                poster: 'https://images.unsplash.com/photo-1568876694728-451bbf694b83?q=80&w=800&auto=format&fit=crop',
+                backdrop: 'https://images.unsplash.com/photo-1568876694728-451bbf694b83?q=80&w=1920&auto=format&fit=crop',
+                trailerUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1',
+                synopsis: 'Un agente encubierto debe infiltrarse en un submarino nuclear tomado por mercenarios antes de que expire el ultimátum global.',
+                cast: 'Tom Cruise, Rebecca Ferguson',
+                reviews: []
+            }
+        ];
+
+        // ESTADO DE LA APLICACIÓN
+        let state = {
+            currentCategory: 'all',
+            currentGenre: 'all',
+            searchQuery: '',
+            myList: JSON.parse(localStorage.getItem('cineSphere_myList')) || [],
+            activeModalMovieId: null,
+            formRating: 5
+        };
+
+        // INICIALIZACIÓN
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMovies();
+            updateMyListBadges();
+            setFormRating(5);
+        });
+
+        // FILTRADO Y RENDERIZADO DE PELÍCULAS
+        function renderMovies() {
+            const grid = document.getElementById('moviesGrid');
+            const noResults = document.getElementById('noResults');
+            const countBadge = document.getElementById('resultsCount');
+
+            // Filtrar películas
+            const filtered = MOVIES_DATABASE.filter(movie => {
+                // Filtro Categoria Nav
+                const matchCategory = state.currentCategory === 'all' || 
+                                     (state.currentCategory === 'mylist' && state.myList.includes(movie.id)) ||
+                                     movie.category === state.currentCategory;
+                // Filtro Género
+                const matchGenre = state.currentGenre === 'all' || movie.genre === state.currentGenre;
+
+                // Filtro Búsqueda
+                const q = state.searchQuery.toLowerCase();
+                const matchSearch = movie.title.toLowerCase().includes(q) || 
+                                    movie.genre.toLowerCase().includes(q) ||
+                                    movie.cast.toLowerCase().includes(q);
+
+                return matchCategory && matchGenre && matchSearch;
+            });
+
+            // Actualizar contador
+            countBadge.textContent = `${filtered.length} película${filtered.length === 1 ? '' : 's'}`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+
+            // Render Tarjetas
+            grid.innerHTML = filtered.map(movie => {
+                const isSaved = state.myList.includes(movie.id);
+                return `
+                    <div class="group relative glass-card rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-brand-red/20 flex flex-col">
+                        <!-- Poster Image Container -->
+                        <div class="relative aspect-[2/3] w-full overflow-hidden bg-gray-900 cursor-pointer" onclick="openMovieModal('${movie.id}')">
+                            <img src="${movie.poster}" alt="${movie.title}" 
+                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 loading="lazy" 
+                                 onerror="this.src='https://placehold.co/400x600/121218/FFFFFF?text=${encodeURIComponent(movie.title)}'">
+                            
+                            <!-- Badges en imagen -->
+                            <div class="absolute top-3 left-3 flex flex-col gap-1">
+                                <span class="bg-black/70 backdrop-blur-md text-amber-400 font-extrabold text-xs px-2 py-1 rounded-md border border-amber-400/30 flex items-center gap-1">
+                                    <i class="fa-solid fa-star"></i> ${movie.rating}
+                                </span>
+                            </div>
+
+                            <!-- Floating Action Favorite Button -->
+                            <button onclick="event.stopPropagation(); toggleFavorite('${movie.id}')" 
+                                    class="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-brand-red transition-all">
+                                <i class="${isSaved ? 'fa-solid text-brand-red' : 'fa-regular'} fa-bookmark"></i>
+                            </button>
+
+                            <!-- Overlay Play Button -->
+                            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <div class="w-12 h-12 rounded-full bg-brand-red text-white flex items-center justify-center shadow-lg shadow-brand-red/50 group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-play ml-1 text-lg"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Info Footer -->
+                        <div class="p-4 flex flex-col flex-grow justify-between space-y-2">
+                            <div>
+                                <div class="flex items-center justify-between text-xs text-gray-400 font-medium mb-1">
+                                    <span>${movie.genre}</span>
+                                    <span>${movie.year}</span>
+                                </div>
+                                <h3 onclick="openMovieModal('${movie.id}')" class="font-bold text-white text-base line-clamp-1 hover:text-brand-red cursor-pointer transition-colors">
+                                    ${movie.title}
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ACCIONES DE NAVEGACIÓN Y FILTROS
+        function filterCategory(category, element = null) {
+            state.currentCategory = category;
+            
+            // Actualizar títulos de sección
+            const titles = {
+                'all': 'Películas Destacadas',
+                'cartelera': 'En Cartelera Actual',
+                'populares': 'Las Más Populares',
+                'proximos': 'Próximos Estrenos Creados para Ti'
+            };
+            document.getElementById('sectionTitle').textContent = titles[category] || 'Explorar Cine';
+
+            // Actualizar estilo botón activo
+            if(element) {
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.className = 'nav-btn px-4 py-1.5 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all';
+                });
+                element.className = 'nav-btn px-4 py-1.5 rounded-full text-sm font-medium bg-brand-red text-white transition-all shadow-md';
+            }
+
+            renderMovies();
+        }
+
+        function filterByGenre(genre, element) {
+            state.currentGenre = genre;
+            
+            document.querySelectorAll('.genre-btn').forEach(btn => {
+                btn.className = 'genre-btn glass-card text-gray-300 hover:text-white hover:bg-white/10 px-5 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all';
+            });
+            element.className = 'genre-btn bg-brand-red text-white px-5 py-2 rounded-xl text-sm font-semibold whitespace-nowrap shadow-md transition-all';
+
+            renderMovies();
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value;
+            state.searchQuery = query;
+            const clearBtn = document.getElementById('clearSearch');
+            
+            if (query.length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+            renderMovies();
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            state.searchQuery = '';
+            document.getElementById('clearSearch').classList.add('hidden');
+            renderMovies();
+        }
+
+        function resetFilters() {
+            state.currentCategory = 'all';
+            state.currentGenre = 'all';
+            clearSearch();
+            renderMovies();
+        }
+
+        function showMyList(element = null) {
+            state.currentCategory = 'mylist';
+            document.getElementById('sectionTitle').textContent = 'Mi Lista de Favoritos';
+            document.getElementById('sectionSubtitle').textContent = 'Películas guardadas para ver más tarde';
+            
+            if(element) {
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.className = 'nav-btn px-4 py-1.5 rounded-full text-sm font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-all';
+                });
+                element.className = 'nav-btn px-4 py-1.5 rounded-full text-sm font-medium bg-brand-red text-white transition-all shadow-md';
+            }
+            renderMovies();
+        }
+
+        // GESTIÓN DE FAVORITOS (Mi Lista + LocalStorage)
+        function toggleFavorite(movieId) {
+            const index = state.myList.indexOf(movieId);
+            if (index > -1) {
+                state.myList.splice(index, 1);
+            } else {
+                state.myList.push(movieId);
+            }
+            localStorage.setItem('cineSphere_myList', JSON.stringify(state.myList));
+            updateMyListBadges();
+            
+            // Si el modal está abierto con esta película, actualizar su botón
+            if (state.activeModalMovieId === movieId) {
+                updateModalFavBtn(movieId);
+            }
+
+            renderMovies();
+        }
+
+        function toggleHeroList() {
+            const heroMovie = MOVIES_DATABASE[0];
+            toggleFavorite(heroMovie.id);
+            updateHeroListBtn();
+        }
+
+        function updateHeroListBtn() {
+            const isSaved = state.myList.includes(MOVIES_DATABASE[0].id);
+            const icon = document.getElementById('heroListIcon');
+            const text = document.getElementById('heroListText');
+            
+            if (isSaved) {
+                icon.className = 'fa-solid fa-check text-green-400 text-lg';
+                text.textContent = 'En Tu Lista';
+            } else {
+                icon.className = 'fa-solid fa-plus text-lg';
+                text.textContent = 'Añadir a Mi Lista';
+            }
+        }
+
+        function updateMyListBadges() {
+            const count = state.myList.length;
+            const badge = document.getElementById('myListCount');
+            const mobileBadge = document.getElementById('mobileListCount');
+            
+            badge.textContent = count;
+            mobileBadge.textContent = count;
+            
+            if(count > 0) {
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+            updateHeroListBtn();
+        }
+
+        // MODAL Y DETALLES DE PELÍCULA
+        function openMovieModal(movieId) {
+            const movie = MOVIES_DATABASE.find(m => m.id === movieId);
+            if (!movie) return;
+
+            state.activeModalMovieId = movieId;
+
+            // Rellenar datos bsicos
+            document.getElementById('modalTitle').textContent = movie.title;
+            document.getElementById('modalGenre').textContent = movie.genre;
+            document.getElementById('modalYear').textContent = movie.year;
+            document.getElementById('modalDuration').textContent = movie.duration;
+            document.getElementById('modalRatingText').textContent = `${movie.rating}/5.0`;
+            document.getElementById('modalSynopsis').textContent = movie.synopsis;
+            document.getElementById('modalCast').textContent = movie.cast;
+
+            // Media Tráiler Embed
+            const mediaContainer = document.getElementById('modalMediaContainer');
+            mediaContainer.innerHTML = `
+                <iframe class="w-full h-full" src="${movie.trailerUrl}" title="${movie.title} Trailer" 
+                        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen></iframe>
+            `;
+
+            // Estrellas
+            const starsContainer = document.getElementById('modalStars');
+            const fullStars = Math.floor(movie.rating);
+            starsContainer.innerHTML = Array.from({length: 5}, (_, i) => 
+                `<i class="fa-solid fa-star ${i < fullStars ? 'text-amber-400' : 'text-gray-600'}"></i>`
+            ).join('');
+
+            // Estado Botón Favoritos
+            const favBtn = document.getElementById('modalFavBtn');
+            favBtn.onclick = () => toggleFavorite(movie.id);
+            updateModalFavBtn(movie.id);
+
+            // Cargar comentarios
+            renderModalComments(movie);
+
+            // Mostrar modal
+            document.getElementById('movieModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function openTrailerModal(type) {
+            if (type === 'hero') {
+                openMovieModal(MOVIES_DATABASE[0].id);
+            }
+        }
+
+        function updateModalFavBtn(movieId) {
+            const isSaved = state.myList.includes(movieId);
+            const favText = document.getElementById('modalFavText');
+            const favBtn = document.getElementById('modalFavBtn');
+
+            if (isSaved) {
+                favText.textContent = 'Guardada en Mi Lista';
+                favBtn.className = 'px-4 py-2 rounded-xl text-sm font-semibold border border-brand-red bg-brand-red/20 text-brand-red transition-all flex items-center gap-2';
+            } else {
+                favText.textContent = 'Añadir a Mi Lista';
+                favBtn.className = 'px-4 py-2 rounded-xl text-sm font-semibold border border-white/10 bg-white/5 hover:bg-white/10 text-white transition-all flex items-center gap-2';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('movieModal').classList.add('hidden');
+            document.getElementById('modalMediaContainer').innerHTML = ''; // Detener video
+            document.body.style.overflow = 'auto';
+            state.activeModalMovieId = null;
+        }
+
+        // SISTEMA DE RESEÑAS Y COMENTARIOS
+        function setFormRating(rating) {
+            state.formRating = rating;
+            const stars = document.querySelectorAll('#ratingPicker i');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.className = 'fa-solid fa-star text-amber-400';
+                } else {
+                    star.className = 'fa-solid fa-star text-gray-600';
+                }
+            });
+        }
+
+        function submitComment(event) {
+            event.preventDefault();
+            const nameInput = document.getElementById('reviewerName');
+            const commentInput = document.getElementById('reviewerComment');
+
+            if (!nameInput.value.trim() || !commentInput.value.trim()) return;
+
+            const movie = MOVIES_DATABASE.find(m => m.id === state.activeModalMovieId);
+            if (!movie) return;
+
+            const newReview = {
+                name: nameInput.value.trim(),
+                rating: state.formRating,
+                comment: commentInput.value.trim()
+            };
+
+            movie.reviews.unshift(newReview);
+            renderModalComments(movie);
+
+            // Limpiar Formulario
+            commentInput.value = '';
+            setFormRating(5);
+        }
+
+        function renderModalComments(movie) {
+            const container = document.getElementById('commentsList');
+            if (!movie.reviews || movie.reviews.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-500 italic py-2">Sé el primero en dejar una reseña para esta película.</p>`;
+                return;
+            }
+
+            container.innerHTML = movie.reviews.map(rev => `
+                <div class="bg-white/5 p-3 rounded-lg border border-white/5 text-xs space-y-1">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-gray-200">${rev.name}</span>
+                        <div class="flex text-amber-400 text-[10px]">
+                            ${Array.from({length: 5}, (_, i) => `<i class="fa-solid fa-star ${i < rev.rating ? '' : 'text-gray-600'}"></i>`).join('')}
+                        </div>
+                    </div>
+                    <p class="text-gray-400 leading-normal">${rev.comment}</p>
+                </div>
+            `).join('');
+        }
+
+        // UTILS
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
