@@ -15,6 +15,7 @@ app.use(express.json({ limit: '100kb' }));
 app.use(sanitizerMiddleware);
 app.use('/api/productos', productosRoutes);
 app.use('/api/transacciones', transaccionesRoutes);
+app.use(express.static(path.resolve(__dirname, '../public')));
 
 app.use((req, res) => {
   res.status(404).json({ status: 'error', message: 'Ruta no encontrada.' });

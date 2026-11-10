@@ -29,11 +29,11 @@ const obtenerPorId = async (req, res, next) => {
 const crear = async (req, res, next) => {
   try {
     const product = ProductoFactory.crearProducto(req.body);
-    await productoRepository.crear(product);
+    const createdProduct = await productoRepository.crear(product);
     return res.status(201).json({
       status: 'success',
       message: 'Producto creado exitosamente.',
-      data: product
+      data: createdProduct
     });
   } catch (error) {
     return next(error);
