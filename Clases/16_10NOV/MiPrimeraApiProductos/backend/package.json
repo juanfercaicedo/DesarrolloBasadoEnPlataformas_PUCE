@@ -9,6 +9,7 @@
   },
   "scripts": {
     "start": "node server.js",
+    "postinstall": "prisma generate",
     "db:generate": "prisma generate",
     "db:push": "dotenv -e ../.env -- prisma db push",
     "lint": "eslint .",
@@ -22,7 +23,8 @@
     "express": "^4.21.2",
     "express-rate-limit": "^8.7.4",
     "helmet": "^8.3.0",
-    "pg": "^8.13.1"
+    "pg": "^8.13.1",
+    "prisma": "^7.10.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -30,7 +32,6 @@
     "eslint": "^10.15.0",
     "eslint-plugin-security": "^4.2.1",
     "globals": "^17.14.0",
-    "prisma": "^7.10.1",
     "supertest": "^7.3.2"
   }
 }
