@@ -1,11 +1,10 @@
 const database = require('../config/databaseSingleton');
 
-const productColumns = 'id, nombre, categoria, pvp';
-const mapProduct = (row) => ({
-  id: row.id,
-  nombre: row.nombre,
-  categoria: row.categoria,
-  pvp: Number(row.pvp)
+const mapProduct = ({ id, nombre, categoria, pvp }) => ({
+  id,
+  nombre,
+  categoria,
+  pvp: Number(pvp)
 });
 
 const parseId = (id) => {
@@ -14,10 +13,10 @@ const parseId = (id) => {
 };
 
 const obtenerTodos = async () => {
-  const { rows } = await database.query(
-    `SELECT ${productColumns} FROM productos ORDER BY id`
-  );
-  return rows.map(mapProduct);
+  const products = await database.client.producto.findMany({
+    orderBy: { id: 'asc' }
+  });
+  return products.map(mapProduct);
 };
 
 const obtenerPorId = async (id) => {
@@ -26,21 +25,21 @@ const obtenerPorId = async (id) => {
     return null;
   }
 
-  const { rows } = await database.query(
-    `SELECT ${productColumns} FROM productos WHERE id = $1`,
-    [parsedId]
-  );
-  return rows[0] ? mapProduct(rows[0]) : null;
+  const product = await database.client.producto.findUnique({
+    where: { id: parsedId }
+  });
+  return product ? mapProduct(product) : null;
 };
 
 const crear = async (product) => {
-  const { rows } = await database.query(
-    `INSERT INTO productos (nombre, categoria, pvp)
-     VALUES ($1, $2, $3)
-     RETURNING ${productColumns}`,
-    [product.nombre, product.categoria, product.pvp]
-  );
-  return mapProduct(rows[0]);
+  const createdProduct = await database.client.producto.create({
+    data: {
+      nombre: product.nombre,
+      categoria: product.categoria,
+      pvp: product.pvp
+    }
+  });
+  return mapProduct(createdProduct);
 };
 
 const actualizar = async (id, product) => {
@@ -49,14 +48,22 @@ const actualizar = async (id, product) => {
     return null;
   }
 
-  const { rows } = await database.query(
-    `UPDATE productos
-     SET nombre = $1, categoria = $2, pvp = $3
-     WHERE id = $4
-     RETURNING ${productColumns}`,
-    [product.nombre, product.categoria, product.pvp, parsedId]
-  );
-  return rows[0] ? mapProduct(rows[0]) : null;
+  try {
+    const updatedProduct = await database.client.producto.update({
+      where: { id: parsedId },
+      data: {
+        nombre: product.nombre,
+        categoria: product.categoria,
+        pvp: product.pvp
+      }
+    });
+    return mapProduct(updatedProduct);
+  } catch (error) {
+    if (error.code === 'P2025') {
+      return null;
+    }
+    throw error;
+  }
 };
 
 const eliminar = async (id) => {
@@ -65,11 +72,10 @@ const eliminar = async (id) => {
     return false;
   }
 
-  const { rowCount } = await database.query(
-    'DELETE FROM productos WHERE id = $1',
-    [parsedId]
-  );
-  return rowCount > 0;
+  const result = await database.client.producto.deleteMany({
+    where: { id: parsedId }
+  });
+  return result.count > 0;
 };
 
 module.exports = { obtenerTodos, obtenerPorId, crear, actualizar, eliminar };

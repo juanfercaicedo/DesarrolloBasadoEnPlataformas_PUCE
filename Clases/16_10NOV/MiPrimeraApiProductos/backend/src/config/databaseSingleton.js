@@ -1,4 +1,5 @@
-const { Pool } = require('pg');
+const { PrismaClient } = require('@prisma/client');
+const { PrismaPg } = require('@prisma/adapter-pg');
 
 class DatabaseSingleton {
   constructor() {
@@ -6,18 +7,11 @@ class DatabaseSingleton {
       return DatabaseSingleton.instance;
     }
 
-    this.pool = new Pool({
-      host: process.env.POSTGRES_HOST || 'localhost',
-      port: Number(process.env.POSTGRES_PORT || 5432),
-      database: process.env.POSTGRES_DB,
-      user: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD
+    const adapter = new PrismaPg({
+      connectionString: process.env.DATABASE_URL
     });
+    this.client = new PrismaClient({ adapter });
     DatabaseSingleton.instance = this;
-  }
-
-  query(text, values) {
-    return this.pool.query(text, values);
   }
 }
 

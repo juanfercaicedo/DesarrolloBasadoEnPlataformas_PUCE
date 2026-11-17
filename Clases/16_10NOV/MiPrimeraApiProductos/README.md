@@ -76,16 +76,19 @@ Para detener el servicio, ejecuta `docker compose down`. Los datos se conservan 
 
 ### API REST Node.js
 
-La API especificada en `backend.md` se conecta a PostgreSQL y opera sobre la tabla `productos` creada por `db/init/01_productos.sql`.
+La API del directorio `backend` usa Prisma ORM para acceder a PostgreSQL. El schema de `backend/prisma/schema.prisma` mapea los modelos `Producto` y `TransaccionProducto` a las tablas creadas por `db/init/`.
 
-Las variables compartidas están en `.env`. Al clonar el proyecto, copia `.env.example` como `.env` y cambia `POSTGRES_PASSWORD`. El archivo `.env` local está excluido de Git.
+Las variables compartidas están en `.env`. Al clonar el proyecto, copia `.env.example` como `.env` y cambia `POSTGRES_PASSWORD` tanto en las variables de PostgreSQL como en `DATABASE_URL`. El archivo `.env` local está excluido de Git.
 
 Desde la carpeta `backend`, instala dependencias e inicia la API:
 
 ```powershell
 npm install
+npm run db:generate
 node server.js
 ```
+
+Para sincronizar las tablas con el schema Prisma en una base existente, ejecuta `npm run db:push` desde `backend`. En una instalación nueva, `docker compose up -d` crea las tablas y datos iniciales mediante los scripts de `db/init/`.
 
 La API queda disponible en `http://localhost:5051/api/productos`.
 
