@@ -90,7 +90,7 @@ node server.js
 
 Para sincronizar las tablas con el schema Prisma en una base existente, ejecuta `npm run db:push` desde `backend`. En una instalación nueva, `docker compose up -d` crea las tablas y datos iniciales mediante los scripts de `db/init/`.
 
-La API queda disponible en `http://localhost:5051/api/productos`.
+La API queda disponible en `http://localhost:5051/api/productos`; su health check es `http://localhost:5051/health`.
 
 El cliente estático no usa frameworks y se sirve en un proceso separado. En otra terminal, desde la carpeta `frontend`, ejecuta:
 
@@ -98,7 +98,7 @@ El cliente estático no usa frameworks y se sirve en un proceso separado. En otr
 node server.js
 ```
 
-Abre `http://localhost:5052/`. El cliente se conecta a la API en el puerto `5051`.
+Abre `http://localhost:2051/`. El cliente se conecta a la API en el puerto `5051`.
 
 Rutas de la API:
 
@@ -110,4 +110,6 @@ Rutas de la API:
 - `GET /api/transacciones`: lista 100 transacciones por página (`?page=1`, `?page=2`, etc.); la respuesta incluye `page`, `perPage`, `total` y `totalPages`.
 
 Los datos que consulta o modifica la API son los mismos que puedes revisar con psql en la base `mi_tienda`.
+
+Para configurar CI y desplegar el backend en Render, consulta [DEPLOYMENT.md](DEPLOYMENT.md).
 

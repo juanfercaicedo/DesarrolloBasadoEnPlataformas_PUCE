@@ -1,4 +1,4 @@
-const errorHandler = (error, req, res, next) => {
+const errorHandler = (error, req, res, _next) => {
   console.error(`[Error Log]: ${error.message}`);
 
   const candidateStatus = error.statusCode || error.status;

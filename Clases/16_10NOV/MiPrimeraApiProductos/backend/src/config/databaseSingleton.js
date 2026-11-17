@@ -7,8 +7,16 @@ class DatabaseSingleton {
       return DatabaseSingleton.instance;
     }
 
+    const connectionString = process.env.DATABASE_URL;
+    if (!connectionString) {
+      throw new Error('DATABASE_URL es obligatoria para conectar con PostgreSQL.');
+    }
+
+    const databaseHost = new URL(connectionString).hostname;
+    const isLocalDatabase = ['localhost', '127.0.0.1', '::1'].includes(databaseHost);
     const adapter = new PrismaPg({
-      connectionString: process.env.DATABASE_URL
+      connectionString,
+      ...(isLocalDatabase ? {} : { ssl: { rejectUnauthorized: true } })
     });
     this.client = new PrismaClient({ adapter });
     DatabaseSingleton.instance = this;
