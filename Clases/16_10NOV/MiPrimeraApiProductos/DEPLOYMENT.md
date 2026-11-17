@@ -25,12 +25,14 @@ The Prisma schema maps the existing `productos` and `transacciones_productos` ta
 
 To enable deployment, configure the GitHub Actions repository secret `RENDER_DEPLOY_HOOK` with the deploy hook URL from Render. The deploy job triggers it only after CI passes on a push to `main`. Without this secret, CI reports that deployment was skipped. Never put the hook URL in source control.
 
+The GitHub Pages workflow publishes the repository tree and the product frontend is available at `https://juanfercaicedo.github.io/DesarrolloBasadoEnPlataformas_PUCE/Clases/16_10NOV/MiPrimeraApiProductos/frontend/public/`. It injects the public Render backend origin into `frontend/public/config.js`; set the optional Actions repository variable `RENDER_API_URL` only if the backend domain changes. Render production CORS allows the Pages origin `https://juanfercaicedo.github.io`.
+
 ## Render setup
 
 1. Create a PostgreSQL instance in Render and a Web Service connected to this repository.
 2. Use the repository root, branch `main`, and the settings in `render.yaml` (or configure the service with root directory `Clases/16_10NOV/MiPrimeraApiProductos/backend`, build command `npm ci && npm run db:generate`, start command `npm start`, and health check `/health`).
 3. Set `DATABASE_URL` to the Render database's **internal** connection URL when both services are in the same region. For external connections, follow the database provider's TLS requirements; do not disable certificate verification as a workaround.
-4. Set `FRONTEND_URL` to the deployed frontend origin. Multiple exact origins may be comma-separated. Production rejects unlisted browser origins. Localhost is allowed only outside production.
+4. Set `FRONTEND_URL` to `https://juanfercaicedo.github.io` (the site origin, without the repository path). Multiple exact origins may be comma-separated. Production rejects unlisted browser origins. Localhost is allowed only outside production. The existing Render service needs this environment variable added manually if the Blueprint is not applied to it.
 5. Set `NODE_ENV=production`. Render supplies `PORT`; do not hardcode it. `DATABASE_URL` and `FRONTEND_URL` are marked as secret/manual values in the Blueprint.
 6. Confirm the schema exists before enabling traffic. The app does not run schema-changing commands on startup. Review and apply any required schema changes deliberately; never point `db:push` at a production database without approval and a backup.
 7. After CI has passed and the deploy hook is configured, verify `/health`, `/api/productos`, CORS from the frontend origin, and Render logs. Do not treat deployment as successful unless these checks pass.
@@ -45,4 +47,4 @@ If any real credential has ever been committed, rotate it at its provider. Remov
 
 ## Deployment status
 
-This repository contains deployment configuration, but no Render service or public URL was created or verified as part of this change. Render account access, a production database URL, the frontend origin, and the `RENDER_DEPLOY_HOOK` secret must be supplied by the project owner. PostgreSQL integration and public post-deployment checks remain pending until those resources are available.
+Render backend URL: `https://desarrollobasadoenplataformas-puce.onrender.com`. The frontend URL is `https://juanfercaicedo.github.io/DesarrolloBasadoEnPlataformas_PUCE/Clases/16_10NOV/MiPrimeraApiProductos/frontend/public/` after the Pages workflow completes. Public Pages deployment and browser-level integration remain pending until the local changes are pushed and the workflow succeeds.

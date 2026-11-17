@@ -8,7 +8,12 @@ const configuredOrigins = (process.env.FRONTEND_URL || '')
 const developmentOrigins = isProduction
   ? []
   : ['http://localhost:5052', 'http://localhost:2051'];
-const allowedOrigins = new Set([...configuredOrigins, ...developmentOrigins]);
+const pagesOrigin = 'https://juanfercaicedo.github.io';
+const allowedOrigins = new Set([
+  ...configuredOrigins,
+  ...developmentOrigins,
+  ...(isProduction ? [pagesOrigin] : [])
+]);
 
 module.exports = cors({
   origin(origin, callback) {

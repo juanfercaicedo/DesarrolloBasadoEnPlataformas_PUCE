@@ -28,6 +28,21 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
+      - name: Configure Render API URL
+        working-directory: Clases/16_10NOV/MiPrimeraApiProductos/frontend/public
+        env:
+          RENDER_API_URL: ${{ vars.RENDER_API_URL }}
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const value = process.env.RENDER_API_URL || 'https://desarrollobasadoenplataformas-puce.onrender.com';
+          const apiUrl = new URL(value);
+          if (apiUrl.protocol !== 'https:' || apiUrl.pathname !== '/' || apiUrl.search || apiUrl.hash) {
+            throw new Error('RENDER_API_URL must be an HTTPS origin without a path, query, or fragment.');
+          }
+          fs.writeFileSync('config.js', `window.MITIENDA_API_URL = ${JSON.stringify(apiUrl.origin)};\n`);
+          NODE
+
       - name: Upload page artifact
         uses: actions/upload-pages-artifact@v3
         with:
